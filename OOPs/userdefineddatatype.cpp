@@ -11,6 +11,7 @@ int main(){
     s1.name = "Memoona";
     s1.rollno = 166;
     s1.gpa = 8.2;
+    //for input cin>>s1.rollno;
 
     Student s2;
     s2.name = "Marium";
