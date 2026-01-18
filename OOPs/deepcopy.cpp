@@ -25,6 +25,10 @@ int main(){
     s2.rno = 168;
     s2.gpa = 3.6;
 
+    Student s3 = s1;
+    s3.name = "Maham";
+
     cout<<s1.name<<" "<<s1.gpa<<" "<<s1.rno<<endl;
     cout<<s2.name<<" "<<s2.gpa<<" "<<s2.rno<<endl;
+    cout<<s3.name<<" "<<s3.gpa<<" "<<s3.rno<<endl;
 }
