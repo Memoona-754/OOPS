@@ -11,11 +11,12 @@ class Cricketer{
         this->runs = runs;
         this->avg = avg;
        }
-};
 
-void print(Cricketer c){    //function out of class
-    cout<<c.name<<" "<<c.runs<<" "<<c.avg<<endl;
-}
+       
+    void print(){    //function in class
+       cout<<name<<" "<<runs<<" "<<avg<<endl;
+    }
+};
 
 int main(){
     Cricketer c1("Babar Azam", 30000,60.9);
@@ -24,6 +25,6 @@ int main(){
   //  cout<<c1.name<<" "<<c1.runs<<endl;
    // cout<<c2.name<<" "<<c2.runs<<endl;
 
-   print(c1);
-   print(c2); 
+   c1.print();
+   c2.print();  
 }  
