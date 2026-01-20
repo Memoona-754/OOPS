@@ -1,5 +1,5 @@
-#include"StudentData.h"
+#include"Studentdata.h"
 int main(){
-    studentData();
+    studentdata();
     return 0;
 }

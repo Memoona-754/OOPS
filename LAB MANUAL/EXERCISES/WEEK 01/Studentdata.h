@@ -1,6 +1,6 @@
 #include<iostream>
 using namespace std;
-void studentData(){
+void studentdata(){
     int rollNo,marks[5],totalMarks=0;
     cout<<"Enter your roll no:";
     cin>>rollNo;
