@@ -25,7 +25,7 @@ void Employee :: setData(int a1,int b1,int c1){
 
 int main(){
     Employee Harry;
-   // Harry.a = 134;
+   // Harry.a = 134;  bcz a is private cannot be accessed directly
     Harry.d = 77;
     Harry.e = 86;
     Harry.setData(1,2,4);
