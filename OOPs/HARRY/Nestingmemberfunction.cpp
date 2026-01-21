@@ -9,6 +9,7 @@ class binary{
     public: 
           void read(void);
           void chk_bin(void);
+          void ones(void);
 };
 
 void binary :: read(void){
@@ -24,6 +25,11 @@ void binary :: chk_bin (void){
         }
     }
 }
+
+void binary :: ones(void){
+    
+}
+
 int main(){
      binary b;
      b.read();
