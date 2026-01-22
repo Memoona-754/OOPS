@@ -10,7 +10,7 @@ private:
 public:
     // Constructor
     BankAccount() {
-        balance = 0.0;
+        balance = 1000000.0;
         transactions = 0;
         interestRate = 0.05;   // 5% interest
     }
