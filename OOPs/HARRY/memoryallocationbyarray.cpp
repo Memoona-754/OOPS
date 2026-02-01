@@ -14,10 +14,10 @@ class Shop{
 };
 
 void Shop :: setPrice(void){
-    cout<<"Enter Id of your item"<<endl;
+    cout<<"Enter Id of your item no "<<counter+1<<endl;
     cin>>itemId[counter];
     cout<<"Enter price of your item"<<endl;
-    cin>>itemprice[counter];
+    cin>>itemPrice[counter];
     counter++;
 }
 
