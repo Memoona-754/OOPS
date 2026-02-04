@@ -34,6 +34,6 @@ int main(){
     ahmad.setData();
     ahmad.getData();
     Employee::getCount();
-    
+
     return 0;
 }
