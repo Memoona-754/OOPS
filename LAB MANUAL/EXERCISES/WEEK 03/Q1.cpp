@@ -1,14 +1,16 @@
 #include <iostream>
 using namespace std;
 
-class Complex {
+class Complex
+{
 private:
     int *real;
     int *imag;
 
 public:
     // Constructor
-    Complex(int r, int i) {
+    Complex(int r, int i)
+    {
         real = new int;
         imag = new int;
         *real = r;
@@ -16,7 +18,8 @@ public:
     }
 
     // Copy Constructor (Deep Copy)
-    Complex(const Complex &obj) {
+    Complex(const Complex &obj)
+    {
         real = new int;
         imag = new int;
         *real = *(obj.real);
@@ -24,20 +27,23 @@ public:
     }
 
     // Display function
-    void display() {
+    void display()
+    {
         cout << "Complex Number: " << *real << " + " << *imag << "i" << endl;
     }
 
     // Destructor
-    ~Complex() {
+    ~Complex()
+    {
         delete real;
         delete imag;
     }
 };
 
-int main() {
-    Complex c1(3, 4);      // Original object
-    Complex c2 = c1;      // Copy constructor called
+int main()
+{
+    Complex c1(3, 4); // Original object
+    Complex c2 = c1;  // Copy constructor called
 
     cout << "Object 1: ";
     c1.display();
