@@ -5,9 +5,7 @@ class DynamicArray {
 private:
     int* arr;
     int currentSize;   
-
 public:
-
     // Parameterized Constructor
     DynamicArray(int size) {
         currentSize = size;
@@ -27,10 +25,8 @@ public:
     // Push function
     void push(int value) {
 
-        // Create new array with size + 1
         int* newArr = new int[currentSize + 1];
 
-        // Copy old values
         for (int i = 0; i < currentSize; i++) {
             newArr[i] = arr[i];
         }
@@ -43,17 +39,13 @@ public:
 
         // Update pointer
         arr = newArr;
-
-        // Increase size
         currentSize++;
     }
-
-    // size() function
     int size() const {
         return currentSize;
     }
 
-    // Display function (for testing)
+    // (for testing)
     void display() const {
         for (int i = 0; i < currentSize; i++) {
             cout << arr[i] << " ";
