@@ -4,17 +4,19 @@ using namespace std;
 class Complex{
     int a,b;
     public:
-    Complex(void);   //constructor decleration 
+    Complex(int , int);   //constructor decleration 
     void printNumber(){
         cout<<"Your number is "<<a<<" + "<<b<<" i "<<endl;
     }
 };
-Complex :: Complex(void){
-    a = 0;
-    b = 0;
+Complex :: Complex(int x, int y){
+    a = x;
+    b = y;
 }
 int main(){
-    Complex a;
+    //there are two ways to pass values to constructor
+    //1.Implicit call
+    Complex a(4,6);
     a.printNumber();
     return 0;
 }
