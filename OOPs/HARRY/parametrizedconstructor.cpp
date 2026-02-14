@@ -18,5 +18,8 @@ int main(){
     //1.Implicit call
     Complex a(4,6);
     a.printNumber();
+    //2.Explicit call
+    Complex b = Complex(5,7);
+    b.printNumber();
     return 0;
 }
