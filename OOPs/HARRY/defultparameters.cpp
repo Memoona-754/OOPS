@@ -11,10 +11,10 @@ class Simple{
     void printData();
 };
 void Simple :: printData(){
-    cout<<"The value of data is "<<data1<<" and "<<data2<<endl;
+    cout<<"The value of data1 and data2 is "<<data1<<" and "<<data2<<endl;
 } 
 int main(){
-    Simple s(1,4);
+    Simple s(1);
     s.printData();
     return 0;
 }
