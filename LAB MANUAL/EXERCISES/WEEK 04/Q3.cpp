@@ -7,10 +7,9 @@ private:
     double account_bal;
     int security_code;
 
-    static int objectCount;   // static variable to count objects
+    static int objectCount;  
 
 public:
-    // Function to initialize data
     void setData(int acc, double bal, int code) {
         account_no = acc;
         account_bal = bal;
@@ -18,20 +17,17 @@ public:
         objectCount++;
     }
 
-    // Function to display data
     void showData() {
         cout << "Account Number: " << account_no << endl;
         cout << "Account Balance: " << account_bal << endl;
         cout << "Security Code: " << security_code << endl;
     }
 
-    // Static function to display object count
     static void showCount() {
         cout << "Total Objects Created: " << objectCount << endl;
     }
 };
 
-// Initialize static variable
 int Account::objectCount = 0;
 
 int main() {
@@ -46,7 +42,7 @@ int main() {
     cout << "\nAccount 2 Details:\n";
     a2.showData();
 
-    Account::showCount();   // calling static function
+    Account::showCount();  
 
     return 0;
 }
