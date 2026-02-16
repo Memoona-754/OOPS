@@ -8,7 +8,7 @@ class BankDeposit
     float returnValue;
 
 public:
-    BankDeposit();
+    BankDeposit(){}
     BankDeposit(int p, int y, float r);
     BankDeposit(int p, int y, int r);
     void show();
@@ -44,7 +44,7 @@ int main()
     int p,y;
     float r;
     int R;
-    bd3.show();
+    bd3.show(); 
     cout<<"Enter the value of p y and r "<<endl;
     cin>>p>>y>>r;
     bd1=BankDeposit(p,y,r);

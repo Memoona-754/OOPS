@@ -1,3 +1,4 @@
+//CT_166    Memoona
 #include <iostream>
 using namespace std;
 
@@ -39,7 +40,7 @@ public:
 };
 
 int main() {
-    HotelMercato customer1("Ahmed", 10);
+    HotelMercato customer1("Memoona", 10);
 
     customer1.calculateRent();
     customer1.display();
