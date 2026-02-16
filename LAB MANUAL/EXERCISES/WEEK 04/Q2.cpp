@@ -6,23 +6,19 @@ private:
     int* arr;
     int currentSize;   
 public:
-    // Parameterized Constructor
     DynamicArray(int size) {
         currentSize = size;
         arr = new int[currentSize];
 
-        // Initialize all values to 0
         for (int i = 0; i < currentSize; i++) {
             arr[i] = 0;
         }
     }
 
-    // Destructor
     ~DynamicArray() {
         delete[] arr;
     }
 
-    // Push function
     void push(int value) {
 
         int* newArr = new int[currentSize + 1];
@@ -31,13 +27,10 @@ public:
             newArr[i] = arr[i];
         }
 
-        // Add new value at end
         newArr[currentSize] = value;
 
-        // Delete old memory
         delete[] arr;
 
-        // Update pointer
         arr = newArr;
         currentSize++;
     }
@@ -45,7 +38,6 @@ public:
         return currentSize;
     }
 
-    // (for testing)
     void display() const {
         for (int i = 0; i < currentSize; i++) {
             cout << arr[i] << " ";
