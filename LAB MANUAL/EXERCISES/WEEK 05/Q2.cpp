@@ -10,7 +10,6 @@ private:
     string institute;
 
 public:
-    // Setters
     void setName(string n) {
         name = n;
     }
@@ -23,7 +22,6 @@ public:
         institute = i;
     }
 
-    // Getters
     string getName() {
         return name;
     }
@@ -134,28 +132,24 @@ int main() {
     ScienceTeacher st;
     MathsTeacher mt;
 
-    // Humanities Teacher
     ht.setName("Ali");
     ht.setAge(40);
     ht.setInstitute("NED University");
     ht.setCourseName("History");
     ht.setDesignation("Lecturer");
 
-    // Science Teacher
     st.setName("Sara");
     st.setAge(35);
     st.setInstitute("NED University");
     st.setCourseName("Physics");
     st.setDesignation("Assistant Professor");
 
-    // Maths Teacher
     mt.setName("Ahmed");
     mt.setAge(45);
     mt.setInstitute("NED University");
     mt.setCourseName("Calculus");
     mt.setDesignation("Professor");
 
-    // Display Output
     cout << "\n--- Humanities Teacher ---\n";
     cout << "Name: " << ht.getName() << endl;
     cout << "Age: " << ht.getAge() << endl;
