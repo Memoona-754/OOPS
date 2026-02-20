@@ -1,62 +1,78 @@
-#include<iostream>
+//CT 166            MEMOONA 
+#include <iostream>
 using namespace std;
-class Base{
-    private:
-        int privateInt;
-    public:
-        int publicInt;
-    protected:
-        int protectedInt;
+class Base
+{
+private:
+    int privateInt;
 
-     void setPrivateInt(int x) {
+public:
+    int publicInt;
+
+protected:
+    int protectedInt;
+
+    void setPrivateInt(int x)
+    {
         privateInt = x;
     }
-    void setProtectedInt(int x) {
+    void setProtectedInt(int x)
+    {
         protectedInt = x;
     }
-    void setPublicInt(int x) {
+    void setPublicInt(int x)
+    {
         publicInt = x;
     }
 
-    int getPrivateInt() {
+    int getPrivateInt()
+    {
         return privateInt;
     }
-    int getProtectedInt() {
+    int getProtectedInt()
+    {
         return protectedInt;
     }
-    int getPublicInt() {
+    int getPublicInt()
+    {
         return publicInt;
     }
 };
-class protectedChild : protected Base{
+class protectedChild : protected Base
+{
 public:
-    void showAccess() {
+    void showAccess()
+    {
         cout << "Protected Inheritance:" << endl;
         cout << "protectedInt accessed directly: " << protectedInt << endl;
         cout << "publicInt accessed directly: " << publicInt << endl;
         cout << "privateInt via getter: " << getPrivateInt() << endl;
     }
-
 };
-class publicChild : public Base {
+class publicChild : public Base
+{
 public:
-    void showAccess() {
+    void showAccess()
+    {
         cout << "Public Inheritance:" << endl;
         cout << "protectedInt accessed directly: " << protectedInt << endl;
         cout << "publicInt accessed directly: " << publicInt << endl;
         cout << "privateInt via getter: " << getPrivateInt() << endl;
     }
 };
-class privateChild : private Base{
+class privateChild : private Base
+{
 public:
-    void showAccess() {
+    void showAccess()
+    {
         cout << "Private Inheritance:" << endl;
         cout << "protectedInt accessed directly: " << protectedInt << endl;
         cout << "publicInt accessed directly: " << publicInt << endl;
         cout << "privateInt via getter: " << getPrivateInt() << endl;
     }
 };
-int main(){
+int main()
+{
     publicChild pc;
     pc.setPrivateInt(10);
     pc.setProtectedInt(20);
