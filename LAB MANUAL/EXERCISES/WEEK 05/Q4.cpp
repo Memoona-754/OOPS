@@ -20,7 +20,8 @@ public:
 };
 class BakedGoods : public Item {
 protected:
-    float discount = 0.10;  };
+    float discount = 0.10;  
+};
 class Cakes : public BakedGoods {
 private:
     float price = 600;
