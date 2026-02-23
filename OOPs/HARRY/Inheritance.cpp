@@ -2,6 +2,7 @@
 using namespace std;
 //base class
 class Employee{
+    public:
     int id;
     public:
     float salary;  
@@ -9,6 +10,7 @@ class Employee{
                 id = inpId;
                 salary = 34.0;
             }
+            Employee(){}
 }; 
 //derived class
 /*
@@ -23,12 +25,17 @@ class members/functions/methods etc....
         id = inpId;
     }
     int languagecode =9;
-
+     void getData(){
+        cout<<id<<endl; 
+     }
  };
 int main(){
     Employee mm(1),nn(2);
     cout<<mm.salary<<endl;
-    cout<<nn.salary;   
+    cout<<nn.salary<<endl;   
     Programmer skillf(1);
+    cout<<skillf.languagecode<<endl;
+    cout<<skillf.id<<endl;
+    skillf.getData();
     return 0;
 }
