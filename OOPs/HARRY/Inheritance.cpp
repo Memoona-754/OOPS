@@ -35,7 +35,7 @@ int main(){
     cout<<nn.salary<<endl;   
     Programmer skillf(1);
     cout<<skillf.languagecode<<endl;
-    cout<<skillf.id<<endl;
+   // cout<<skillf.id<<endl; connot print id directly bcz it is inherited privately
     skillf.getData();
     return 0;
 }
