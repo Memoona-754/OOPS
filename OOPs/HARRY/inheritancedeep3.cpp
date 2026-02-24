@@ -50,7 +50,7 @@ void Derived ::display()
 int main()
 {
     Derived der;
-    //der.setData();
+    //der.setData();   as we used private in derived class
     der.process();
     der.display();
 
