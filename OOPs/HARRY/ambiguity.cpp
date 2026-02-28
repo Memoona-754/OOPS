@@ -17,7 +17,7 @@ class Derived : public Base1,public Base2{
     public:
     void greet(){
         Base1 :: greet(); // to fix ambiguity
-        Base2 :: greet();
+        Base2 :: greet(); //we can also call both like this
     }
 };
 int main(){
