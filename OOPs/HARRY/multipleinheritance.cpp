@@ -2,7 +2,7 @@
 using namespace std;
 
 /*syntax for inheriting in multiple inheritance:
-class Derived : cisinility mode base1, visibility mode base2{
+class Derived : cisinility mode base1, visibility mode base2,visibility mode base3...........{
       class body of class "DerivedC"
 };*/
 class Base1{

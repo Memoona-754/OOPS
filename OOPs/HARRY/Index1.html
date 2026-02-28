@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carry Lookahead Adder — Interactive Diagram</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+
+  :root {
+    --bg: #070b14;
+    --panel: #0d1526;
+    --border: #1a2a4a;
+    --accent: #00eeff;
+    --accent2: #ff6b35;
+    --accent3: #7fff6b;
+    --accent4: #c77dff;
+    --wire: #1e3a5f;
+    --wire-active: #00e5ff;
+    --text: #c8d8f0;
+    --dim: #4a6080;
+    --glow: 0 0 12px #00e5ff88;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  header {
+    padding: 24px 32px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-shadow: var(--glow);
+  }
+
+  .subtitle { color: var(--dim); font-size: 12px; letter-spacing: 2px; }
+
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 0;
+    height: calc(100vh - 65px);
+  }
+
+  .diagram-area {
+    padding: 24px;
+    overflow: auto;
+    position: relative;
+  }
+
+  .sidebar {
+    border-left: 1px solid var(--border);
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ── Controls ── */
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .input-label {
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 1px;
+    width: 28px;
+  }
+
+  .bit-group {
+    display: flex;
+    gap: 4px;
+  }
+
+  .bit-btn {
+    width: 28px;
+    height: 28px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 3px;
+  }
+
+  .bit-btn.on {
+    background: #00e5ff22;
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 8px #00e5ff44;
+  }
+
+  .bit-btn:hover { border-color: var(--accent); color: var(--text); }
+
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--dim);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+
+  /* ── Equations panel ── */
+  .eq-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .eq-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 8px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+
+  .eq-row.highlight { border-color: var(--accent); background: #00e5ff11; }
+
+  .eq-val { color: var(--accent); font-weight: bold; }
+  .eq-val.gen { color: var(--accent3); }
+  .eq-val.prop { color: var(--accent4); }
+  .eq-val.carry { color: var(--accent); }
+  .eq-val.sum { color: var(--accent2); }
+
+  /* ── SVG diagram ── */
+  svg {
+    display: block;
+    width: 100%;
+    min-width: 760px;
+  }
+
+  .gate-body { fill: var(--panel); stroke-width: 1.5; }
+  .gate-label { font-family: 'Share Tech Mono', monospace; font-size: 9px; fill: var(--dim); }
+  .gate-name { font-family: 'Orbitron', monospace; font-size: 8px; font-weight: 700; fill: var(--text); }
+  .wire-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; }
+  .bit-label { font-family: 'Orbitron', monospace; font-size: 9px; letter-spacing: 1px; fill: var(--dim); }
+
+  .result-box {
+    padding: 8px 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .result-box.carry-out { border-color: var(--accent); }
+
+  .note {
+    font-size: 10px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+
+  .note span { color: var(--text); }
+
+  .animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+  .tag-g { background: #7fff6b22; color: var(--accent3); border: 1px solid var(--accent3); }
+  .tag-p { background: #c77dff22; color: var(--accent4); border: 1px solid var(--accent4); }
+  .tag-c { background: #00e5ff22; color: var(--accent); border: 1px solid var(--accent); }
+  .tag-s { background: #ff6b3522; color: var(--accent2); border: 1px solid var(--accent2); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>CARRY LOOKAHEAD ADDER</h1>
+  <span class="subtitle">4-BIT INTERACTIVE DIAGRAM</span>
+</header>
+
+<div class="main">
+  <div class="diagram-area">
+    <svg id="cla-svg" viewBox="0 0 780 560" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#1e3a5f"/>
+        </marker>
+        <marker id="arr-active" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#00e5ff"/>
+        </marker>
+        <filter id="glow-filter">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- ══════════════════════════════════════════════
+           TITLE LABELS
+      ══════════════════════════════════════════════ -->
+      <text x="390" y="22" text-anchor="middle" font-family="Orbitron,monospace" font-size="11" fill="#1a2a4a" letter-spacing="4">STAGE 3 (MSB)  ···  STAGE 2  ···  STAGE 1  ···  STAGE 0 (LSB)</text>
+
+      <!-- Column x-centers: 630, 450, 270, 90 -->
+
+      <!-- ══════════════════════════════════════════════
+           INPUT LABELS — A, B for each stage
+      ══════════════════════════════════════════════ -->
+      <!-- Stage 0 -->
+      <text x="76" y="55" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#c77dff" id="lbl-a0">A₀</text>
+      <text x="104" y="55" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#ff6b35" id="lbl-b0">B₀</text>
+      <!-- Stage 1 -->
+      <text x="256" y="55" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#c77dff" id="lbl-a1">A₁</text>
+      <text x="284" y="55" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#ff6b35" id="lbl-b1">B₁</text>
+      <!-- Stage 2 -->
+      <text x="436" y="55" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#c77dff" id="lbl-a2">A₂</text>
+      <text x="464" y="55" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#ff6b35" id="lbl-b2">B₂</text>
+      <!-- Stage 3 -->
+      <text x="616" y="55" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#c77dff" id="lbl-a3">A₃</text>
+      <text x="644" y="55" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="#ff6b35" id="lbl-b3">B₃</text>
+
+      <!-- C₀ input label -->
+      <text x="30" y="195" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#00e5ff" id="lbl-c0">C₀</text>
+
+      <!-- ══════════════════════════════════════════════
+           STAGE BACKGROUNDS
+      ══════════════════════════════════════════════ -->
+      <rect x="40"  y="30" width="140" height="380" rx="6" fill="#0a0f1e" stroke="#1a2a4a" stroke-width="1"/>
+      <rect x="220" y="30" width="140" height="380" rx="6" fill="#0a0f1e" stroke="#1a2a4a" stroke-width="1"/>
+      <rect x="400" y="30" width="140" height="380" rx="6" fill="#0a0f1e" stroke="#1a2a4a" stroke-width="1"/>
+      <rect x="580" y="30" width="140" height="380" rx="6" fill="#0a0f1e" stroke="#1a2a4a" stroke-width="1"/>
+
+      <!-- Stage labels -->
+      <text x="110" y="44" text-anchor="middle" font-family="Orbitron,monospace" font-size="8" fill="#1a2a4a" letter-spacing="2">BIT 0</text>
+      <text x="290" y="44" text-anchor="middle" font-family="Orbitron,monospace" font-size="8" fill="#1a2a4a" letter-spacing="2">BIT 1</text>
+      <text x="470" y="44" text-anchor="middle" font-family="Orbitron,monospace" font-size="8" fill="#1a2a4a" letter-spacing="2">BIT 2</text>
+      <text x="650" y="44" text-anchor="middle" font-family="Orbitron,monospace" font-size="8" fill="#1a2a4a" letter-spacing="2">BIT 3</text>
+
+      <!-- ══════════════════════════════════════════════
+           PG UNITS (Generate/Propagate) - row 1
+           G = A AND B  |  P = A XOR B
+      ══════════════════════════════════════════════ -->
+
+      <!-- Template: each stage has AND gate (G) and XOR gate (P) -->
+      <!-- STAGE 0 @ x=90 -->
+      <!-- AND gate for G0 -->
+      <g id="and0">
+        <path d="M 62,75 L 62,95 Q 82,95 82,85 Q 82,75 62,75 Z" class="gate-body" stroke="#7fff6b"/>
+        <text x="67" y="88" class="gate-name" fill="#7fff6b">AND</text>
+        <line x1="76" y1="60" x2="76" y2="75" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+        <line x1="68" y1="60" x2="68" y2="75" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+      </g>
+      <!-- XOR gate for P0 -->
+      <g id="xor0">
+        <path d="M 100,75 Q 120,85 100,95 Q 114,85 100,75" class="gate-body" stroke="#c77dff" stroke-width="1.5" fill="var(--panel)"/>
+        <text x="104" y="88" class="gate-name" fill="#c77dff" font-size="7">XOR</text>
+        <line x1="108" y1="60" x2="108" y2="75" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+        <line x1="116" y1="60" x2="116" y2="75" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+      </g>
+      <!-- G0, P0 output labels -->
+      <text x="72" y="110" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7fff6b" id="lbl-g0">G₀=0</text>
+      <text x="110" y="110" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#c77dff" id="lbl-p0">P₀=0</text>
+      <line x1="72" y1="95" x2="72" y2="105" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+      <line x1="110" y1="95" x2="110" y2="105" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+
+      <!-- STAGE 1 @ x=270 -->
+      <g id="and1">
+        <path d="M 242,75 L 242,95 Q 262,95 262,85 Q 262,75 242,75 Z" class="gate-body" stroke="#7fff6b"/>
+        <text x="247" y="88" class="gate-name" fill="#7fff6b">AND</text>
+        <line x1="256" y1="60" x2="256" y2="75" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+        <line x1="248" y1="60" x2="248" y2="75" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+      </g>
+      <g id="xor1">
+        <path d="M 280,75 Q 300,85 280,95 Q 294,85 280,75" class="gate-body" stroke="#c77dff" stroke-width="1.5" fill="var(--panel)"/>
+        <text x="284" y="88" class="gate-name" fill="#c77dff" font-size="7">XOR</text>
+        <line x1="288" y1="60" x2="288" y2="75" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+        <line x1="296" y1="60" x2="296" y2="75" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+      </g>
+      <text x="252" y="110" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7fff6b" id="lbl-g1">G₁=0</text>
+      <text x="290" y="110" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#c77dff" id="lbl-p1">P₁=0</text>
+      <line x1="252" y1="95" x2="252" y2="105" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+      <line x1="290" y1="95" x2="290" y2="105" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+
+      <!-- STAGE 2 @ x=450 -->
+      <g id="and2">
+        <path d="M 422,75 L 422,95 Q 442,95 442,85 Q 442,75 422,75 Z" class="gate-body" stroke="#7fff6b"/>
+        <text x="427" y="88" class="gate-name" fill="#7fff6b">AND</text>
+        <line x1="436" y1="60" x2="436" y2="75" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+        <line x1="428" y1="60" x2="428" y2="75" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+      </g>
+      <g id="xor2">
+        <path d="M 460,75 Q 480,85 460,95 Q 474,85 460,75" class="gate-body" stroke="#c77dff" stroke-width="1.5" fill="var(--panel)"/>
+        <text x="464" y="88" class="gate-name" fill="#c77dff" font-size="7">XOR</text>
+        <line x1="468" y1="60" x2="468" y2="75" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+        <line x1="476" y1="60" x2="476" y2="75" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+      </g>
+      <text x="432" y="110" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7fff6b" id="lbl-g2">G₂=0</text>
+      <text x="470" y="110" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#c77dff" id="lbl-p2">P₂=0</text>
+      <line x1="432" y1="95" x2="432" y2="105" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+      <line x1="470" y1="95" x2="470" y2="105" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+
+      <!-- STAGE 3 @ x=630 -->
+      <g id="and3">
+        <path d="M 602,75 L 602,95 Q 622,95 622,85 Q 622,75 602,75 Z" class="gate-body" stroke="#7fff6b"/>
+        <text x="607" y="88" class="gate-name" fill="#7fff6b">AND</text>
+        <line x1="616" y1="60" x2="616" y2="75" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+        <line x1="608" y1="60" x2="608" y2="75" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+      </g>
+      <g id="xor3">
+        <path d="M 640,75 Q 660,85 640,95 Q 654,85 640,75" class="gate-body" stroke="#c77dff" stroke-width="1.5" fill="var(--panel)"/>
+        <text x="644" y="88" class="gate-name" fill="#c77dff" font-size="7">XOR</text>
+        <line x1="648" y1="60" x2="648" y2="75" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+        <line x1="656" y1="60" x2="656" y2="75" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+      </g>
+      <text x="612" y="110" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#7fff6b" id="lbl-g3">G₃=0</text>
+      <text x="650" y="110" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="#c77dff" id="lbl-p3">P₃=0</text>
+      <line x1="612" y1="95" x2="612" y2="105" stroke="#7fff6b" stroke-width="1.2" opacity="0.6"/>
+      <line x1="650" y1="95" x2="650" y2="105" stroke="#c77dff" stroke-width="1.2" opacity="0.6"/>
+
+      <!-- ══════════════════════════════════════════════
+           CARRY LOOKAHEAD UNIT (center box)
+      ══════════════════════════════════════════════ -->
+      <rect x="100" y="135" width="560" height="120" rx="8" fill="#060d1a" stroke="#00e5ff" stroke-width="1.5" opacity="0.9"/>
+      <text x="380" y="152" text-anchor="middle" font-family="Orbitron,monospace" font-size="11" fill="#00e5ff" letter-spacing="3">CARRY LOOKAHEAD UNIT</text>
+      <text x="380" y="166" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="#1a3a5a">all carries computed simultaneously from G, P, C₀</text>
+
+      <!-- Equations inside CLU box -->
+      <text x="130" y="188" font-family="Share Tech Mono,monospace" font-size="10" fill="#1e4a6a">C₁ = G₀ + P₀·C₀</text>
+      <text x="310" y="188" font-family="Share Tech Mono,monospace" font-size="10" fill="#1e4a6a">C₂ = G₁ + P₁·G₀ + P₁·P₀·C₀</text>
+      <text x="130" y="210" font-family="Share Tech Mono,monospace" font-size="10" fill="#1e4a6a">C₃ = G₂ + P₂·G₁ + P₂·P₁·G₀ + P₂·P₁·P₀·C₀</text>
+      <text x="130" y="232" font-family="Share Tech Mono,monospace" font-size="10" fill="#1e4a6a">C₄ = G₃ + P₃·G₂ + P₃·P₂·G₁ + P₃·P₂·P₁·G₀ + P₃·P₂·P₁·P₀·C₀</text>
+
+      <!-- Carry output values inside box -->
+      <text x="620" y="188" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="12" fill="#00e5ff" id="lbl-c1-box">C₁=0</text>
+      <text x="620" y="210" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="12" fill="#00e5ff" id="lbl-c2-box">C₂=0</text>
+      <text x="620" y="232" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="12" fill="#00e5ff" id="lbl-c3-box">C₃=0</text>
+      <text x="620" y="254" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="12" fill="#00e5ff" id="lbl-c4-box">C₄=0</text>
+
+      <!-- Wires from G,P into CLU box -->
+      <!-- G0 -->
+      <line x1="72" y1="105" x2="72" y2="135" stroke="#7fff6b" stroke-width="1.2" opacity="0.5"/>
+      <!-- P0 -->
+      <line x1="110" y1="105" x2="110" y2="135" stroke="#c77dff" stroke-width="1.2" opacity="0.5"/>
+      <!-- G1 -->
+      <line x1="252" y1="105" x2="252" y2="135" stroke="#7fff6b" stroke-width="1.2" opacity="0.5"/>
+      <!-- P1 -->
+      <line x1="290" y1="105" x2="290" y2="135" stroke="#c77dff" stroke-width="1.2" opacity="0.5"/>
+      <!-- G2 -->
+      <line x1="432" y1="105" x2="432" y2="135" stroke="#7fff6b" stroke-width="1.2" opacity="0.5"/>
+      <!-- P2 -->
+      <line x1="470" y1="105" x2="470" y2="135" stroke="#c77dff" stroke-width="1.2" opacity="0.5"/>
+      <!-- G3 -->
+      <line x1="612" y1="105" x2="612" y2="135" stroke="#7fff6b" stroke-width="1.2" opacity="0.5"/>
+      <!-- P3 -->
+      <line x1="650" y1="105" x2="650" y2="135" stroke="#c77dff" stroke-width="1.2" opacity="0.5"/>
+      <!-- C0 in -->
+      <line x1="40" y1="190" x2="100" y2="190" stroke="#00e5ff" stroke-width="1.5" opacity="0.7" stroke-dasharray="4,2"/>
+
+      <!-- ══════════════════════════════════════════════
+           CARRY WIRES FROM CLU TO SUM STAGES
+      ══════════════════════════════════════════════ -->
+      <!-- C0 to stage 0 XOR -->
+      <line x1="40" y1="190" x2="40" y2="320" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+      <line x1="40" y1="320" x2="90" y2="320" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+      <text x="60" y="315" font-family="Share Tech Mono,monospace" font-size="9" fill="#00e5ff">C₀</text>
+
+      <!-- C1 from CLU to stage 1 -->
+      <line x1="200" y1="255" x2="200" y2="320" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+      <line x1="200" y1="320" x2="270" y2="320" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+      <text x="212" y="315" font-family="Share Tech Mono,monospace" font-size="9" fill="#00e5ff">C₁</text>
+
+      <!-- C2 from CLU to stage 2 -->
+      <line x1="380" y1="255" x2="380" y2="320" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+      <line x1="380" y1="320" x2="450" y2="320" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+      <text x="392" y="315" font-family="Share Tech Mono,monospace" font-size="9" fill="#00e5ff">C₂</text>
+
+      <!-- C3 from CLU to stage 3 -->
+      <line x1="560" y1="255" x2="560" y2="320" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+      <line x1="560" y1="320" x2="630" y2="320" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+      <text x="572" y="315" font-family="Share Tech Mono,monospace" font-size="9" fill="#00e5ff">C₃</text>
+
+      <!-- C4 output -->
+      <line x1="740" y1="255" x2="760" y2="255" stroke="#00e5ff" stroke-width="2" opacity="0.9"/>
+      <text x="744" y="250" font-family="Share Tech Mono,monospace" font-size="9" fill="#00e5ff">C₄</text>
+
+      <!-- CLU carry output drop lines -->
+      <line x1="200" y1="255" x2="200" y2="265" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+      <line x1="380" y1="255" x2="380" y2="265" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+      <line x1="560" y1="255" x2="560" y2="265" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+      <line x1="740" y1="255" x2="740" y2="265" stroke="#00e5ff" stroke-width="1.2" opacity="0.5"/>
+
+      <!-- ══════════════════════════════════════════════
+           SUM STAGES — XOR(Pi, Ci)
+      ══════════════════════════════════════════════ -->
+      <!-- Sum XOR gates, row at y=330..360 -->
+
+      <!-- Stage 0 Sum XOR -->
+      <path d="M 80,330 Q 110,345 80,360 Q 100,345 80,330" fill="var(--panel)" stroke="#ff6b35" stroke-width="1.5"/>
+      <text x="86" y="348" font-family="Orbitron,monospace" font-size="7" fill="#ff6b35">XOR</text>
+      <!-- P0 wire in -->
+      <line x1="110" y1="310" x2="110" y2="330" stroke="#c77dff" stroke-width="1" opacity="0.6"/>
+      <line x1="110" y1="330" x2="95" y2="338" stroke="#c77dff" stroke-width="1" opacity="0.6"/>
+      <!-- C0 wire in -->
+      <line x1="90" y1="320" x2="90" y2="352" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
+      <!-- Sum output -->
+      <line x1="100" y1="360" x2="100" y2="390" stroke="#ff6b35" stroke-width="1.5"/>
+      <text x="100" y="405" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="12" fill="#ff6b35" id="lbl-s0">S₀=0</text>
+
+      <!-- Stage 1 Sum XOR -->
+      <path d="M 260,330 Q 290,345 260,360 Q 280,345 260,330" fill="var(--panel)" stroke="#ff6b35" stroke-width="1.5"/>
+      <text x="266" y="348" font-family="Orbitron,monospace" font-size="7" fill="#ff6b35">XOR</text>
+      <line x1="290" y1="310" x2="290" y2="330" stroke="#c77dff" stroke-width="1" opacity="0.6"/>
+      <line x1="290" y1="330" x2="275" y2="338" stroke="#c77dff" stroke-width="1" opacity="0.6"/>
+      <line x1="270" y1="320" x2="270" y2="352" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
+      <line x1="280" y1="360" x2="280" y2="390" stroke="#ff6b35" stroke-width="1.5"/>
+      <text x="280" y="405" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="12" fill="#ff6b35" id="lbl-s1">S₁=0</text>
+
+      <!-- Stage 2 Sum XOR -->
+      <path d="M 440,330 Q 470,345 440,360 Q 460,345 440,330" fill="var(--panel)" stroke="#ff6b35" stroke-width="1.5"/>
+      <text x="446" y="348" font-family="Orbitron,monospace" font-size="7" fill="#ff6b35">XOR</text>
+      <line x1="470" y1="310" x2="470" y2="330" stroke="#c77dff" stroke-width="1" opacity="0.6"/>
+      <line x1="470" y1="330" x2="455" y2="338" stroke="#c77dff" stroke-width="1" opacity="0.6"/>
+      <line x1="450" y1="320" x2="450" y2="352" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
+      <line x1="460" y1="360" x2="460" y2="390" stroke="#ff6b35" stroke-width="1.5"/>
+      <text x="460" y="405" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="12" fill="#ff6b35" id="lbl-s2">S₂=0</text>
+
+      <!-- Stage 3 Sum XOR -->
+      <path d="M 620,330 Q 650,345 620,360 Q 640,345 620,330" fill="var(--panel)" stroke="#ff6b35" stroke-width="1.5"/>
+      <text x="626" y="348" font-family="Orbitron,monospace" font-size="7" fill="#ff6b35">XOR</text>
+      <line x1="650" y1="310" x2="650" y2="330" stroke="#c77dff" stroke-width="1" opacity="0.6"/>
+      <line x1="650" y1="330" x2="635" y2="338" stroke="#c77dff" stroke-width="1" opacity="0.6"/>
+      <line x1="630" y1="320" x2="630" y2="352" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
+      <line x1="640" y1="360" x2="640" y2="390" stroke="#ff6b35" stroke-width="1.5"/>
+      <text x="640" y="405" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="12" fill="#ff6b35" id="lbl-s3">S₃=0</text>
+
+      <!-- ══════════════════════════════════════════════
+           LEGEND & DELAY ANNOTATION
+      ══════════════════════════════════════════════ -->
+      <rect x="40" y="430" width="700" height="110" rx="6" fill="#080d18" stroke="#1a2a4a" stroke-width="1"/>
+
+      <text x="60" y="450" font-family="Orbitron,monospace" font-size="9" fill="#1a3a5a" letter-spacing="2">LEGEND</text>
+      <rect x="60" y="458" width="14" height="8" fill="#7fff6b22" stroke="#7fff6b" stroke-width="1"/>
+      <text x="78" y="467" font-family="Share Tech Mono,monospace" font-size="10" fill="#7fff6b">Generate (G = A AND B)</text>
+      <rect x="60" y="474" width="14" height="8" fill="#c77dff22" stroke="#c77dff" stroke-width="1"/>
+      <text x="78" y="483" font-family="Share Tech Mono,monospace" font-size="10" fill="#c77dff">Propagate (P = A XOR B)</text>
+      <rect x="60" y="490" width="14" height="8" fill="#00e5ff22" stroke="#00e5ff" stroke-width="1"/>
+      <text x="78" y="499" font-family="Share Tech Mono,monospace" font-size="10" fill="#00e5ff">Carry (C — computed in parallel)</text>
+      <rect x="60" y="506" width="14" height="8" fill="#ff6b3522" stroke="#ff6b35" stroke-width="1"/>
+      <text x="78" y="515" font-family="Share Tech Mono,monospace" font-size="10" fill="#ff6b35">Sum (S = P XOR C)</text>
+
+      <text x="310" y="450" font-family="Orbitron,monospace" font-size="9" fill="#1a3a5a" letter-spacing="2">GATE DELAY ANALYSIS</text>
+      <text x="310" y="468" font-family="Share Tech Mono,monospace" font-size="10" fill="#4a6080">Step 1 — Compute G, P:   <tspan fill="#7fff6b">1 gate delay</tspan></text>
+      <text x="310" y="484" font-family="Share Tech Mono,monospace" font-size="10" fill="#4a6080">Step 2 — All carries (CLU): <tspan fill="#00e5ff">2 gate delays</tspan></text>
+      <text x="310" y="500" font-family="Share Tech Mono,monospace" font-size="10" fill="#4a6080">Step 3 — Compute sums:   <tspan fill="#ff6b35">1 gate delay</tspan></text>
+      <line x1="310" y1="508" x2="620" y2="508" stroke="#1a2a4a" stroke-width="1"/>
+      <text x="310" y="524" font-family="Share Tech Mono,monospace" font-size="10" fill="#4a6080">Total: <tspan fill="#00e5ff" font-size="12">4 gate delays</tspan> <tspan fill="#1a3a5a"> — O(1), independent of n</tspan></text>
+      <text x="310" y="536" font-family="Share Tech Mono,monospace" font-size="10" fill="#1a3a5a">vs Ripple Carry: 2n gate delays  (8 for 4-bit)</text>
+    </svg>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════════════ -->
+  <div class="sidebar">
+    <div class="section-title">INPUT BITS</div>
+    <div class="controls">
+      <div class="input-row">
+        <span class="input-label">A</span>
+        <div class="bit-group" id="A-bits">
+          <button class="bit-btn" data-bus="A" data-bit="3">0</button>
+          <button class="bit-btn" data-bus="A" data-bit="2">0</button>
+          <button class="bit-btn" data-bus="A" data-bit="1">0</button>
+          <button class="bit-btn" data-bus="A" data-bit="0">0</button>
+        </div>
+        <span style="font-size:10px;color:var(--dim);margin-left:4px;" id="A-dec">(0)</span>
+      </div>
+      <div class="input-row">
+        <span class="input-label">B</span>
+        <div class="bit-group" id="B-bits">
+          <button class="bit-btn" data-bus="B" data-bit="3">0</button>
+          <button class="bit-btn" data-bus="B" data-bit="2">0</button>
+          <button class="bit-btn" data-bus="B" data-bit="1">0</button>
+          <button class="bit-btn" data-bus="B" data-bit="0">0</button>
+        </div>
+        <span style="font-size:10px;color:var(--dim);margin-left:4px;" id="B-dec">(0)</span>
+      </div>
+      <div class="input-row">
+        <span class="input-label">C₀</span>
+        <button class="bit-btn" id="cin-btn" data-bus="CIN" data-bit="0">0</button>
+      </div>
+    </div>
+
+    <div class="section-title">GENERATE / PROPAGATE</div>
+    <div class="eq-panel">
+      <div class="eq-row" id="row-g0"><span>G₀ = A₀·B₀</span><span class="eq-val gen" id="val-g0">0</span></div>
+      <div class="eq-row" id="row-g1"><span>G₁ = A₁·B₁</span><span class="eq-val gen" id="val-g1">0</span></div>
+      <div class="eq-row" id="row-g2"><span>G₂ = A₂·B₂</span><span class="eq-val gen" id="val-g2">0</span></div>
+      <div class="eq-row" id="row-g3"><span>G₃ = A₃·B₃</span><span class="eq-val gen" id="val-g3">0</span></div>
+      <div class="eq-row" id="row-p0"><span>P₀ = A₀⊕B₀</span><span class="eq-val prop" id="val-p0">0</span></div>
+      <div class="eq-row" id="row-p1"><span>P₁ = A₁⊕B₁</span><span class="eq-val prop" id="val-p1">0</span></div>
+      <div class="eq-row" id="row-p2"><span>P₂ = A₂⊕B₂</span><span class="eq-val prop" id="val-p2">0</span></div>
+      <div class="eq-row" id="row-p3"><span>P₃ = A₃⊕B₃</span><span class="eq-val prop" id="val-p3">0</span></div>
+    </div>
+
+    <div class="section-title">CARRIES (PARALLEL)</div>
+    <div class="eq-panel">
+      <div class="eq-row" id="row-c1"><span>C₁</span><span class="eq-val carry" id="val-c1">0</span></div>
+      <div class="eq-row" id="row-c2"><span>C₂</span><span class="eq-val carry" id="val-c2">0</span></div>
+      <div class="eq-row" id="row-c3"><span>C₃</span><span class="eq-val carry" id="val-c3">0</span></div>
+      <div class="eq-row result-box carry-out" id="row-c4"><span>C₄ (cout)</span><span class="eq-val carry" id="val-c4">0</span></div>
+    </div>
+
+    <div class="section-title">SUMS</div>
+    <div class="eq-panel">
+      <div class="eq-row" id="row-s0"><span>S₀ = P₀⊕C₀</span><span class="eq-val sum" id="val-s0">0</span></div>
+      <div class="eq-row" id="row-s1"><span>S₁ = P₁⊕C₁</span><span class="eq-val sum" id="val-s1">0</span></div>
+      <div class="eq-row" id="row-s2"><span>S₂ = P₂⊕C₂</span><span class="eq-val sum" id="val-s2">0</span></div>
+      <div class="eq-row" id="row-s3"><span>S₃ = P₃⊕C₃</span><span class="eq-val sum" id="val-s3">0</span></div>
+    </div>
+
+    <div class="section-title">RESULT</div>
+    <div class="result-box" style="border-color:var(--accent2)">
+      <span>Sum (decimal)</span>
+      <span class="eq-val sum" id="val-result">0</span>
+    </div>
+    <div class="result-box" style="border-color:var(--accent2)">
+      <span>Binary (C₄ S₃S₂S₁S₀)</span>
+      <span class="eq-val sum" id="val-binary">0 0000</span>
+    </div>
+
+    <div class="note">
+      Click bits above to toggle. All carries are computed <span>simultaneously</span> by the CLU — no ripple chain.
+    </div>
+  </div>
+</div>
+
+<script>
+  // State
+  const state = { A: [0,0,0,0], B: [0,0,0,0], CIN: 0 };
+
+  function compute() {
+    const A = state.A, B = state.B, C0 = state.CIN;
+
+    // Generate and Propagate
+    const G = A.map((a,i) => a & B[i]);
+    const P = A.map((a,i) => a ^ B[i]);
+
+    // Carries (lookahead)
+    const C1 = G[0] | (P[0] & C0);
+    const C2 = G[1] | (P[1] & G[0]) | (P[1] & P[0] & C0);
+    const C3 = G[2] | (P[2] & G[1]) | (P[2] & P[1] & G[0]) | (P[2] & P[1] & P[0] & C0);
+    const C4 = G[3] | (P[3] & G[2]) | (P[3] & P[2] & G[1]) | (P[3] & P[2] & P[1] & G[0]) | (P[3] & P[2] & P[1] & P[0] & C0);
+
+    const carries = [C0, C1, C2, C3];
+    const S = P.map((p,i) => p ^ carries[i]);
+
+    return { G, P, C: [C0,C1,C2,C3,C4], S };
+  }
+
+  function update() {
+    const r = compute();
+    const { G, P, C, S } = r;
+
+    // Update sidebar values
+    ['g0','g1','g2','g3'].forEach((id,i) => {
+      const el = document.getElementById('val-'+id);
+      el.textContent = G[i];
+      document.getElementById('row-'+id).classList.toggle('highlight', G[i]===1);
+    });
+    ['p0','p1','p2','p3'].forEach((id,i) => {
+      const el = document.getElementById('val-'+id);
+      el.textContent = P[i];
+      document.getElementById('row-'+id).classList.toggle('highlight', P[i]===1);
+    });
+    [1,2,3,4].forEach(i => {
+      document.getElementById('val-c'+i).textContent = C[i];
+      document.getElementById('row-c'+i).classList.toggle('highlight', C[i]===1);
+    });
+    ['s0','s1','s2','s3'].forEach((id,i) => {
+      document.getElementById('val-'+id).textContent = S[i];
+      document.getElementById('row-'+id).classList.toggle('highlight', S[i]===1);
+    });
+
+    // Result
+    const Aval = state.A.reduce((acc,b,i) => acc + (b << i), 0);
+    const Bval = state.B.reduce((acc,b,i) => acc + (b << i), 0);
+    const sum = Aval + Bval + state.CIN;
+    document.getElementById('val-result').textContent = sum;
+    const binStr = C[4] + ' ' + [S[3],S[2],S[1],S[0]].join('');
+    document.getElementById('val-binary').textContent = binStr;
+
+    // Update SVG labels
+    ['g0','g1','g2','g3'].forEach((id,i) => {
+      document.getElementById('lbl-'+id).textContent = `G${['₀','₁','₂','₃'][i]}=${G[i]}`;
+    });
+    ['p0','p1','p2','p3'].forEach((id,i) => {
+      document.getElementById('lbl-'+id).textContent = `P${['₀','₁','₂','₃'][i]}=${P[i]}`;
+    });
+    document.getElementById('lbl-c1-box').textContent = `C₁=${C[1]}`;
+    document.getElementById('lbl-c2-box').textContent = `C₂=${C[2]}`;
+    document.getElementById('lbl-c3-box').textContent = `C₃=${C[3]}`;
+    document.getElementById('lbl-c4-box').textContent = `C₄=${C[4]}`;
+    ['s0','s1','s2','s3'].forEach((id,i) => {
+      document.getElementById('lbl-'+id).textContent = `S${['₀','₁','₂','₃'][i]}=${S[i]}`;
+    });
+
+    // A/B decimal
+    document.getElementById('A-dec').textContent = `(${Aval})`;
+    document.getElementById('B-dec').textContent = `(${Bval})`;
+  }
+
+  // Button click handlers
+  document.querySelectorAll('.bit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const bus = btn.dataset.bus;
+      const bit = parseInt(btn.dataset.bit);
+
+      if (bus === 'CIN') {
+        state.CIN ^= 1;
+        btn.textContent = state.CIN;
+        btn.classList.toggle('on', state.CIN === 1);
+      } else {
+        state[bus][bit] ^= 1;
+        btn.textContent = state[bus][bit];
+        btn.classList.toggle('on', state[bus][bit] === 1);
+      }
+
+      update();
+    });
+  });
+
+  update();
+</script>
+</body>
+</html>
