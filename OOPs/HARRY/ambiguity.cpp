@@ -9,11 +9,16 @@ class Base1{
 class Base2{
     public:
     void greet(){
-        cout<<"kasi ho?";
+        cout<<"kasi ho?"<<endl;
     }
 };
 class Derived : public Base1,public Base2{
     int a;
+    public:
+    void greet(){
+        Base1 :: greet(); // to fix ambiguity
+        Base2 :: greet();
+    }
 };
 int main(){
     Base1 base1obj;
@@ -21,6 +26,6 @@ int main(){
     base1obj.greet();
     base2obj.greet();
     Derived d;
-    d.greet();
+    d.greet();// like this it will cause ambiguity
     return 0;
 }
