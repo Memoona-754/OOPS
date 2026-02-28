@@ -28,4 +28,4 @@ int main(){
     Derived d;
     d.greet();// like this it will cause ambiguity
     return 0;
-}
+}    
