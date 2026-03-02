@@ -39,7 +39,6 @@ class Sports: virtual public Student{
         void print_score(void){
             cout<<"Your PT score is "<<score<<endl;
         }
-
 };
 
 class Result : public Test, public Sports{
