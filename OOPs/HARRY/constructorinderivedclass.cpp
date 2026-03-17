@@ -22,12 +22,14 @@ class Base2{
         cout<<"The value of data2 is "<<data2<<endl;
     }
 };
+//class Derived: public Base2, public Base1   (order will be changed)
 class Derived: public Base1, public Base2{
     int derived1, derived2;
     public:
     Derived(int a,int b, int c, int d): Base1(a),Base2(b){
         derived1=c;
         derived2=d;
+        cout<<"Derived class constructor called"<<endl; 
     }
     void printDataderived(void){
         cout<<"The value of  derived1 is "<< derived1<<endl;
@@ -35,5 +37,9 @@ class Derived: public Base1, public Base2{
     }
 };
 int main(){
-     
+     Derived memoona(1,2,3,4);
+     memoona.printDatabase1();
+     memoona.printDatabase2(); 
+     memoona.printDataderived();
+     return 0; 
 }  
