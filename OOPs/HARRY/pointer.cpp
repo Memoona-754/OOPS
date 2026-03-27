@@ -8,6 +8,8 @@ int main(){
 
     //new keyword
     int *p= new int(30);
-    cout<<"The value at address p is "<<*(p);
+    cout<<"The value at address p is "<<*(p)<<endl;
+    float *q= new float(30.9999);
+    cout<<"The value at address q is "<<*(q);
     return 0; 
 }
