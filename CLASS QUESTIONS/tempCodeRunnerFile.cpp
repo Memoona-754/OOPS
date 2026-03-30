@@ -1,25 +1,21 @@
 #include <iostream>
 using namespace std;
-class Student
+class Person
 {
 public:
-    int age;
-    // Constructor with argument
-    Student(int a)
+    int *age;
+    Person(int a)
     {
-        age = a;
+        age = new int(a);
     }
-    // Copy constructor
-    Student(const Student &s)
+    ~Person()
     {
-        age = s.age;
-        cout << "Copy constructor called!" << endl;
+        delete age;
     }
 };
 int main()
 {
-    Student s1(20);  // normal constructor
-    Student s2 = s1; // copy constructor
-    cout << s2.age << endl;
+    Person p1(30);
+    Person p2 = p1; // default copy constructor
     return 0;
 }
