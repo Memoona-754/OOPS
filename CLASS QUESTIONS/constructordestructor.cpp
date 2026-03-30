@@ -6,7 +6,7 @@ Car() { cout << "Object created"<<endl; } // constructor
 ~Car() { cout << "Object destroyed"; } // destructor
 };
 int main(){
-    Car myCar;
-    return 0;
+    Car myCar;  //constructor called here
+    return 0;   // destructor called here automatically
     
 }

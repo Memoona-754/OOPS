@@ -10,9 +10,9 @@ public:
         age = a;
     }
     // Copy constructor
-    Student(const Student &s)
+    Student(const Student & moon)
     {
-        age = s.age;
+        age = moon.age;
         cout << "Copy constructor called!" << endl;
     }
 };
@@ -20,6 +20,7 @@ int main()
 {
     Student s1(20);  // normal constructor
     Student s2 = s1; // copy constructor
+    cout<<s1.age<<endl;
     cout << s2.age << endl;
     return 0;
 }
