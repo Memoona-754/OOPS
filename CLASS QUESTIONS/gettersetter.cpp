@@ -16,7 +16,7 @@ public:
     // Getter
     int getSalary()
     {
-        cout<<"The salary is:"<<salary<<endl;
+        cout<<"The salary is: "<<salary<<endl;
         return salary;
     }
 };
