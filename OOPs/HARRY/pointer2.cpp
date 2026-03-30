@@ -18,7 +18,7 @@ using namespace std;
       Complex *ptr = new Complex;
        //c1.setData(1.54);
        //c1.getData();
-             //(*ptr).setData(1,45); is same as
+         //(*ptr).setData(1,45); is same as
          ptr->setData(1,44);
        (*ptr).getData();
        return 0;
