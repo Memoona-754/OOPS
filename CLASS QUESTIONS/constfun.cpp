@@ -15,14 +15,13 @@ public:
     // constant member function
     int getRadius() const
     {
-        radius =10;
         return radius;
     }
 };
 
 int main()
 {
-    Circle c1();
+    Circle c1(5);
     cout << "Radius: " << c1.getRadius() << endl;
 
     return 0;
