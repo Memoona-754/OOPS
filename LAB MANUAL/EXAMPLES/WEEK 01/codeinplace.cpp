@@ -2,10 +2,9 @@
 #include <string>
 using namespace std;
 
-// ============================================================
 //  BASE CLASS: Character
 //  Contains pure virtual functions → makes Character abstract
-// ============================================================
+
 class Character {
 protected:
     string name;
@@ -30,9 +29,8 @@ public:
     virtual ~Character() {}
 };
 
-// ============================================================
 //  DERIVED CLASS: Warrior
-// ============================================================
+
 class Warrior : public Character {
 public:
     Warrior(const string& n, int hp, int lvl)
@@ -40,18 +38,17 @@ public:
 
     void attack() override {
         cout << "[Warrior] " << name
-             << " swings a heavy broadsword! ⚔️\n";
+             << " swings a heavy broadsword! \n";
     }
 
     void power() override {
         cout << "[Warrior] " << name
-             << " activates SHIELD BASH — stuns the enemy! 🛡️\n";
+             << " activates SHIELD BASH — stuns the enemy! \n";
     }
 };
 
-// ============================================================
 //  DERIVED CLASS: Mage
-// ============================================================
+
 class Mage : public Character {
 public:
     Mage(const string& n, int hp, int lvl)
@@ -59,19 +56,16 @@ public:
 
     void attack() override {
         cout << "[Mage] " << name
-             << " hurls a magic missile! 🔮\n";
+             << " hurls a magic missile! \n";
     }
 
     void power() override {
         cout << "[Mage] " << name
-             << " casts INFERNO BLAST — deals massive area damage! 🔥\n";
+             << " casts INFERNO BLAST — deals massive area damage! \n";
     }
 };
 
-// ============================================================
 //  CLASS: DamageCalculator — Function Overloading
-//  Same function name, different parameter lists
-// ============================================================
 class DamageCalculator {
 public:
     // Overload 1 — basic attack (1 parameter: base damage)
@@ -85,10 +79,7 @@ public:
     }
 };
 
-// ============================================================
 //  CLASS: Position — Operator Overloading
-//  Overloads + to combine two positions
-// ============================================================
 class Position {
 public:
     float x, y;
@@ -107,17 +98,10 @@ public:
     }
 };
 
-// ============================================================
-//  MAIN — Demonstrates all concepts
-// ============================================================
 int main() {
-    cout << "========================================\n";
-    cout << "       2D GAME SYSTEM — C++ Demo\n";
-    cout << "========================================\n\n";
+    cout << "       2D GAME SYSTEM   \n";
 
-    // ----------------------------------------------------------
     // 1. POLYMORPHISM — Base class pointers calling derived methods
-    // ----------------------------------------------------------
     cout << "--- POLYMORPHISM (Virtual Functions) ---\n\n";
 
     // Create objects
@@ -136,9 +120,7 @@ int main() {
         cout << "\n";
     }
 
-    // ----------------------------------------------------------
     // 2. FUNCTION OVERLOADING — DamageCalculator
-    // ----------------------------------------------------------
     cout << "--- FUNCTION OVERLOADING (DamageCalculator) ---\n\n";
 
     DamageCalculator calc;
@@ -151,9 +133,7 @@ int main() {
     cout << "  Special Attack (2 params): "
          << special << " damage\n\n";
 
-    // ----------------------------------------------------------
     // 3. OPERATOR OVERLOADING — Position class
-    // ----------------------------------------------------------
     cout << "--- OPERATOR OVERLOADING (Position +) ---\n\n";
 
     Position warrior_pos(3.0f, 5.0f);
@@ -164,9 +144,7 @@ int main() {
     cout << "  Movement vector        : " << movement    << "\n";
     cout << "  New position           : " << new_pos     << "\n\n";
 
-    cout << "========================================\n";
     cout << "           End of Demo\n";
-    cout << "========================================\n";
 
     return 0;
 }
