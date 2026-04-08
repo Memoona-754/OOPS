@@ -144,7 +144,7 @@ int main() {
     cout << "  Movement vector        : " << movement    << "\n";
     cout << "  New position           : " << new_pos     << "\n\n";
 
-    cout << "           End of Demo\n";
+    cout << "           End of Game\n";
 
     return 0;
 }
