@@ -29,7 +29,7 @@ public:
     Rectangle(float l, float w) {
         length = l;
         width = w;
-        area = 0;
+        //area = 0;
     }
 
     // Function to calculate area
