@@ -3,9 +3,6 @@
 #include <cmath>
 using namespace std;
 
-// ─────────────────────────────────────────
-//  Base class
-// ─────────────────────────────────────────
 class Shape {
 protected:
     int    numberOfSides;
@@ -24,9 +21,6 @@ public:
     void setArea(double a)        { area = a; }
 };
 
-// ─────────────────────────────────────────
-//  Rectangle
-// ─────────────────────────────────────────
 class Rectangle : public Shape {
 protected:
     double length;
@@ -49,9 +43,6 @@ public:
     }
 };
 
-// ─────────────────────────────────────────
-//  Circle
-// ─────────────────────────────────────────
 class Circle : public Shape {
 private:
     double radius;
@@ -69,9 +60,6 @@ public:
     }
 };
 
-// ─────────────────────────────────────────
-//  Triangle
-// ─────────────────────────────────────────
 class Triangle : public Shape {
 private:
     double height;
@@ -92,17 +80,13 @@ public:
     }
 };
 
-// ─────────────────────────────────────────
-//  Square  (inherits Rectangle)
-// ─────────────────────────────────────────
 class Square : public Rectangle {
 public:
-    // Passes the same side for both length and width
     Square(double side)
         : Rectangle(side, side) {}
 
     bool checkSides() const {
-        return length == width;     // inherited from Rectangle
+        return length == width;    
     }
 
     void generateArea() {
@@ -110,9 +94,6 @@ public:
     }
 };
 
-// ─────────────────────────────────────────
-//  Driver
-// ─────────────────────────────────────────
 int main() {
     Rectangle rect(8.0, 5.0);
     rect.generateArea();
