@@ -1,4 +1,3 @@
-//CT_25166            //MEMOONA
 #include <iostream>
 using namespace std;
 
@@ -66,7 +65,7 @@ int main() {
 
     cout << "\nNumbers entered  :  "
          << n1 << ",  " << n2 << ",  " << n3 << "\n";
-         
+
     // Addition
     cout << "add("  << n1 << ", " << n2 << ")         = "
          << calc.add(n1, n2)         << "\n";

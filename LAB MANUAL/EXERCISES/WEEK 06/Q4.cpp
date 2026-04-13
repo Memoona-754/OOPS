@@ -1,4 +1,3 @@
-//CT_25166            //MEMOONA
 #include <iostream>
 #include <string>
 using namespace std;
