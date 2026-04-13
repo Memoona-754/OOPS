@@ -66,8 +66,7 @@ int main() {
 
     cout << "\nNumbers entered  :  "
          << n1 << ",  " << n2 << ",  " << n3 << "\n";
-   // cout << "─────────────────────────────────────────\n";
-
+         
     // Addition
     cout << "add("  << n1 << ", " << n2 << ")         = "
          << calc.add(n1, n2)         << "\n";
