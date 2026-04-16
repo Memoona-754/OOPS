@@ -1,5 +1,5 @@
 #include<iostream>
-uisng namespace std;
+using namespace std;
 
 class Employee
 {
@@ -9,7 +9,7 @@ class Employee
 public:
     void setData(void)
     {
-        cout << "Enter the id" << endl;
+        cout << "Enter the id: ";
         cin >> id;
         count++;
     }
