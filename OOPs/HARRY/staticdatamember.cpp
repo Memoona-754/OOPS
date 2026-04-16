@@ -1,38 +1,47 @@
 #include<iostream>
 uisng namespace std;
 
-class Employee{
+class Employee
+{
     int id;
-    static int count; //value of static variable is defaultly 0(zero) 
-    public:
-    void setData(void){
-        cout<<"Entr the id "<<endl;
-        cin>>id;
+    static int count;
+
+public:
+    void setData(void)
+    {
+        cout << "Enter the id" << endl;
+        cin >> id;
         count++;
     }
-    void getData(void){
-        cout<<"The id of this employee is "<<id<<"and this is employee number "<<count<<endl;
+    void getData(void)
+    {
+        cout << "The id of this employee is " << id << " and this is employee number " << count << endl;
     }
+
     static void getCount(void){
+        // cout<<id; // throws an error
         cout<<"The value of count is "<<count<<endl;
     }
 };
+// Count is the static data member of class Employee
+int Employee::count; // Default value is 0
 
-int  Employee :: count;
+int main()
+{
+    Employee harry, rohan, lovish;
+    // harry.id = 1;
+    // harry.count=1; // cannot do this as id and count are private
 
-int main(){
-    Employee ali,ahad,ahmad;
-   /* harry.id=1;
-    harry.count = 1;  con't do this bcz id and count are private*/
-
-    ali.setData();
-    ali.getData();
-    Employee::getCount();  
-    ahad.setData();
-    ahad.getData();
+    harry.setData();
+    harry.getData();
     Employee::getCount();
-    ahmad.setData();
-    ahmad.getData();
+
+    rohan.setData();
+    rohan.getData();
+    Employee::getCount();
+
+    lovish.setData();
+    lovish.getData();
     Employee::getCount();
 
     return 0;
