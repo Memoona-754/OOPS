@@ -1,14 +1,7 @@
-// ============================================================
-//  Array2D.cpp  –  2D Dynamic Integer Array using double pointer
-// ============================================================
-
 #include <iostream>
 #include <stdexcept>
 using namespace std;
 
-// ─────────────────────────────────────────────────────────────
-//  CLASS DECLARATION
-// ─────────────────────────────────────────────────────────────
 class Array2D {
 private:
     int** data;   // pointer-to-pointer (double pointer)
@@ -34,12 +27,10 @@ private:
     }
 
 public:
-    // ── 1. DEFAULT CONSTRUCTOR ─────────────────────────────────
     Array2D() : data(nullptr), rows(0), cols(0) {
         cout << "[Default Constructor] Empty 2D array created.\n";
     }
 
-    // ── 2. PARAMETERISED CONSTRUCTOR ──────────────────────────
     Array2D(int r, int c, int initVal = 0) {
         if (r <= 0 || c <= 0)
             throw invalid_argument("Dimensions must be positive.");
@@ -156,12 +147,12 @@ int main() {
     cout << "============================================================\n\n";
 
     // ── Test 1: Default Constructor ───────────────────────────
-    cout << "── TEST 1: Default Constructor ──────────────────────────\n";
+    cout << "TEST 1: Default Constructor\n";
     Array2D empty;
     cout << "  Rows: " << empty.getRows() << ", Cols: " << empty.getCols() << "\n\n";
 
     // ── Test 2: Parameterised Constructor ─────────────────────
-    cout << "── TEST 2: Parameterised Constructor ────────────────────\n";
+    cout << " TEST 2: Parameterised Constructor \n";
     Array2D A(3, 3);
     // Fill manually via indexing operator
     int val = 1;
@@ -179,38 +170,38 @@ int main() {
     cout << "\n";
 
     // ── Test 3: Copy Constructor ──────────────────────────────
-    cout << "── TEST 3: Copy Constructor ─────────────────────────────\n";
+    cout << " TEST 3: Copy Constructor\n";
     Array2D C(A);   // copy of A
     C.print("Matrix C (copy of A)");
     cout << "\n";
 
     // ── Test 4: Assignment Operator ───────────────────────────
-    cout << "── TEST 4: Assignment Operator ──────────────────────────\n";
+    cout << "TEST 4: Assignment Operator \n";
     Array2D D(3, 3, 0);
     D = B;   // assign B to D
     D.print("Matrix D (assigned from B)");
     cout << "\n";
 
     // ── Test 5: Operator + ────────────────────────────────────
-    cout << "── TEST 5: Operator + (A + B) ───────────────────────────\n";
+    cout << "TEST 5: Operator + (A + B) \n";
     Array2D sum = A + B;
     sum.print("A + B");
     cout << "\n";
 
     // ── Test 6: Operator - ────────────────────────────────────
-    cout << "── TEST 6: Operator - (A - B) ───────────────────────────\n";
+    cout << "TEST 6: Operator - (A - B)\n";
     Array2D diff = A - B;
     diff.print("A - B");
     cout << "\n";
 
     // ── Test 7: Operator * (matrix multiplication) ────────────
-    cout << "── TEST 7: Operator * (A * B) ───────────────────────────\n";
+    cout << " TEST 7: Operator * (A * B)\n";
     Array2D prod = A * B;
     prod.print("A * B");
     cout << "\n";
 
     // ── Test 8: Indexing Operator ─────────────────────────────
-    cout << "── TEST 8: Indexing Operator ────────────────────────────\n";
+    cout << "TEST 8: Indexing Operator \n";
     cout << "  A[1][2] = " << A[1][2] << "  (expected: 6)\n";
     A[1][2] = 99;
     cout << "  After A[1][2] = 99:\n";
@@ -218,13 +209,13 @@ int main() {
     cout << "\n";
 
     // ── Test 9: Self-assignment guard ─────────────────────────
-    cout << "── TEST 9: Self-assignment guard ────────────────────────\n";
+    cout << " TEST 9: Self-assignment guard\n";
     B = B;
     B.print("Matrix B (unchanged after B = B)");
     cout << "\n";
 
     // ── Test 10: Error handling ───────────────────────────────
-    cout << "── TEST 10: Error Handling ──────────────────────────────\n";
+    cout << " TEST 10: Error Handling \n";
     try {
         Array2D X(2, 3, 1);
         Array2D Y(3, 2, 1);
@@ -243,6 +234,6 @@ int main() {
     cout << "\n";
 
     // ── Destructors fire here as locals go out of scope ───────
-    cout << "── Destructors firing as locals leave scope ─────────────\n";
+    cout << " Destructors firing as locals leave scope \n";
     return 0;
 }
