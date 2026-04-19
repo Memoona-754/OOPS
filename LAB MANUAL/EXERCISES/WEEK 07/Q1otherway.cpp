@@ -1,3 +1,4 @@
+//CT-25166           //MEMOONA
 #include <iostream>
 using namespace std;
 
@@ -8,13 +9,13 @@ private:
 
 public:
 
-    // 🔹 Default Constructor
+    //  Default Constructor
     Array2D() {
         rows = cols = 0;
         arr = nullptr;
     }
 
-    // 🔹 Parameterized Constructor
+    // Parameterized Constructor
     Array2D(int r, int c) {
         rows = r;
         cols = c;
@@ -30,7 +31,7 @@ public:
                 arr[i][j] = 0;
     }
 
-    // 🔹 Copy Constructor
+    //  Copy Constructor
     Array2D(const Array2D& other) {
         rows = other.rows;
         cols = other.cols;
@@ -44,7 +45,7 @@ public:
         }
     }
 
-    // 🔹 Assignment Operator
+    //  Assignment Operator
     Array2D& operator=(const Array2D& other) {
         if (this == &other)
             return *this;
@@ -69,12 +70,12 @@ public:
         return *this;
     }
 
-    // 🔹 Indexing Operator []
+    //  Indexing Operator []
     int* operator[](int i) {
         return arr[i];
     }
 
-    // 🔹 Addition
+    //  Addition
     Array2D operator+(const Array2D& other) {
         Array2D result(rows, cols);
 
@@ -85,7 +86,7 @@ public:
         return result;
     }
 
-    // 🔹 Subtraction
+    //  Subtraction
     Array2D operator-(const Array2D& other) {
         Array2D result(rows, cols);
 
@@ -96,7 +97,7 @@ public:
         return result;
     }
 
-    // 🔹 Multiplication (Matrix Multiplication)
+    //  Multiplication (Matrix Multiplication)
     Array2D operator*(const Array2D& other) {
         Array2D result(rows, other.cols);
 
@@ -111,7 +112,7 @@ public:
         return result;
     }
 
-    // 🔹 Display function
+    //  Display function
     void display() const {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -121,7 +122,7 @@ public:
         }
     }
 
-    // 🔹 Destructor
+    //  Destructor
     ~Array2D() {
         for (int i = 0; i < rows; i++)
             delete[] arr[i];
