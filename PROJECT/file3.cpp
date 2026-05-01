@@ -31,14 +31,8 @@
 #include <limits>
 using namespace std;
 
-// ================================================================
-//  WEEK 7 — ABSTRACT BASE CLASS 1: MediaContent
-//  Cannot be instantiated. Forces subclasses to implement
-//  display(), getContentType(), getDuration().
-// ================================================================
 class MediaContent {
 private:
-    // WEEK 2 — ENCAPSULATION: all data is private
     int    contentID;
     string title;
     string language;
@@ -46,40 +40,31 @@ private:
     int    releaseYear;
 
 public:
-    // WEEK 3 — PARAMETERIZED CONSTRUCTOR
     MediaContent(int id, const string& t, const string& l,
                  double r, int y)
         : contentID(id), title(t), language(l),
           imdbRating(r), releaseYear(y) {}
 
-    virtual ~MediaContent() {}   // virtual destructor — mandatory
-
-    // WEEK 2 — GETTERS (controlled access to private data)
+    virtual ~MediaContent() {}  
     int    getContentID()   const { return contentID;   }
     string getTitle()       const { return title;        }
     string getLanguage()    const { return language;     }
     double getImdbRating()  const { return imdbRating;   }
     int    getReleaseYear() const { return releaseYear;  }
 
-    // WEEK 2 — SETTERS
     void setTitle(const string& t)  { title = t;       }
     void setImdbRating(double r)    { imdbRating = r;  }
 
-    // WEEK 7 — PURE VIRTUAL FUNCTIONS (makes class abstract)
     virtual void   display()        const = 0;
     virtual string getContentType() const = 0;
     virtual double getDuration()    const = 0;
 
-    // Non-pure virtual — has default, can be overridden
     virtual void play() const {
         cout << "[PLAY] " << title
              << " [" << getContentType() << "]\n";
     }
 };
 
-// ================================================================
-//  WEEK 7 — ABSTRACT BASE CLASS 2: StreamingEngine
-// ================================================================
 class StreamingEngine {
 private:
     string serverRegion;
@@ -94,7 +79,6 @@ public:
     string getServerRegion() const { return serverRegion; }
     int    getBufferSize()   const { return bufferSizeMB; }
 
-    // Pure virtual — every engine must implement these
     virtual void   stream()             const = 0;
     virtual string getQuality()         const = 0;
     virtual int    getBitrate()         const = 0;
@@ -108,15 +92,12 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 7 — ABSTRACT BASE CLASS 3: User
-// ================================================================
 class User {
 private:
     int    userID;
     string name;
     string email;
-    string password;   // never returned — encapsulation protects it
+    string password; 
 
 public:
     User(int id, const string& n, const string& e, const string& p)
@@ -128,13 +109,11 @@ public:
     string getName()   const { return name;   }
     string getEmail()  const { return email;  }
 
-    // Password never exposed — only checked
     bool checkPassword(const string& p) const { return password == p; }
 
     void setName(const string& n)  { name = n;  }
     void setEmail(const string& e) { email = e; }
 
-    // Pure virtual — FreeUser and PremiumUser must implement
     virtual string getAccountType() const = 0;
     virtual bool   canDownload()    const = 0;
     virtual bool   canWatchHD()     const = 0;
@@ -147,9 +126,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 5 — INHERITANCE: Episode (child of MediaContent)
-// ================================================================
 class Episode : public MediaContent {
 private:
     int    seasonNo;
@@ -183,9 +159,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 5 — INHERITANCE: Movie (child of MediaContent)
-// ================================================================
 class Movie : public MediaContent {
 private:
     string         genre;
@@ -235,16 +208,12 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 5 — INHERITANCE: Series (child of MediaContent)
-//           COMPOSITION: Series HAS-A vector of Episodes
-// ================================================================
 class Series : public MediaContent {
 private:
     string          genre;
     int             totalSeasons;
-    string          status;       // "Ongoing" or "Completed"
-    vector<Episode> episodes;     // composition — Series owns Episodes
+    string          status;       
+    vector<Episode> episodes;     
 
 public:
     Series(int id, const string& t, const string& l,
@@ -295,9 +264,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 5 — INHERITANCE: Documentary (child of MediaContent)
-// ================================================================
 class Documentary : public MediaContent {
 private:
     string topic;
@@ -344,9 +310,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 5 — INHERITANCE: FreeUser (child of User)
-// ================================================================
 class FreeUser : public User {
 private:
     int  minutesWatched;
@@ -375,7 +338,6 @@ public:
              << " mins remaining this month)\n";
     }
 
-    // WEEK 6 — POLYMORPHISM: same function names, different behavior
     string getAccountType() const override { return "Free";  }
     bool   canDownload()    const override { return false;   }
     bool   canWatchHD()     const override { return false;   }
@@ -404,9 +366,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 5 — INHERITANCE: PremiumUser (child of User)
-// ================================================================
 class PremiumUser : public User {
 private:
     string         plan;
@@ -468,9 +427,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 6 — OPERATOR OVERLOADING + WEEK 9 FRIEND FUNCTION
-// ================================================================
 class Rating {
 private:
     int    contentID;
@@ -507,7 +463,6 @@ public:
                       "Averaged rating", datePosted);
     }
 
-    // WEEK 9 — FRIEND FUNCTION: accesses private members directly
     friend ostream& operator<<(ostream& os, const Rating& r) {
         os << "Rating[Content#" << r.contentID
            << " User#" << r.userID
@@ -531,10 +486,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 11 — TEMPLATE CLASS 1: WatchHistory<T>
-//  Works with Movie, Episode, Documentary — same class, any type
-// ================================================================
 template<typename T>
 class WatchHistory {
 private:
@@ -578,10 +529,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 11 — TEMPLATE CLASS 2: Subscription<T>
-//  Templated on plan type: MonthlyPlan, AnnualPlan, FamilyPlan
-// ================================================================
 struct MonthlyPlan {
     string name = "Monthly"; double price = 14.99; int days = 30;
     string info() const { return "Monthly ($14.99/month)"; }
@@ -636,9 +583,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 5 — INHERITANCE: Streaming Engines
-// ================================================================
 class SDStream : public StreamingEngine {
     int bitrate; bool buffering;
 public:
@@ -700,9 +644,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 4+11 — DYNAMIC ARRAY (new/delete + Copy Constructor)
-// ================================================================
 class DynamicArray {
 private:
     int* data;
@@ -718,12 +659,10 @@ private:
     }
 
 public:
-    // WEEK 3 — CONSTRUCTOR
     DynamicArray(int cap = 4) : size_(0), capacity(cap) {
         data = new int[capacity];
     }
 
-    // WEEK 11 — COPY CONSTRUCTOR (deep copy)
     DynamicArray(const DynamicArray& other)
         : size_(other.size_), capacity(other.capacity) {
         data = new int[capacity];
@@ -731,9 +670,8 @@ public:
         cout << "[DYNARRAY] Copy constructor — deep copy made.\n";
     }
 
-    // WEEK 11 — COPY ASSIGNMENT OPERATOR
     DynamicArray& operator=(const DynamicArray& other) {
-        if (this == &other) return *this;  // self-assignment guard
+        if (this == &other) return *this; 
         delete[] data;
         size_ = other.size_; capacity = other.capacity;
         data = new int[capacity];
@@ -742,7 +680,6 @@ public:
         return *this;
     }
 
-    // WEEK 3 — DESTRUCTOR (frees heap memory)
     ~DynamicArray() { delete[] data; }
 
     void push(int v) { if (size_==capacity) resize(); data[size_++]=v; }
@@ -762,9 +699,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 14 — STACK (LIFO) built on DynamicArray
-// ================================================================
 class Stack {
 private:
     DynamicArray arr;
@@ -798,9 +732,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 14 — QUEUE (FIFO) built on DynamicArray
-// ================================================================
 class Queue {
 private:
     DynamicArray arr;
@@ -834,14 +765,11 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 12 — STL CONTAINERS: map, queue, stack
-// ================================================================
 class ContentCatalog {
 private:
-    map<int,string>     catalog;      // STL map  — ID → title
-    std::queue<string>  watchQueue;   // STL queue — FIFO watch list
-    std::stack<string>  recentStack;  // STL stack — LIFO history
+    map<int,string>     catalog;      
+    std::queue<string>  watchQueue;   
+    std::stack<string>  recentStack;  
 
 public:
     void addContent(int id, const string& title) {
@@ -878,10 +806,6 @@ public:
     }
 };
 
-// ================================================================
-//  WEEK 6b — FUNCTION OVERLOADING
-//  Same function name, 4 different parameter signatures
-// ================================================================
 class SearchHelper {
 public:
     static void search(const string& keyword) {
@@ -894,9 +818,6 @@ public:
         cout << "[SEARCH] Min IMDB rating: " << minRating << "+\n"; }
 };
 
-// ================================================================
-//  WEEK 12 — CUSTOM EXCEPTION CLASSES
-// ================================================================
 class AuthException : public exception {
     string msg;
 public:
@@ -918,9 +839,6 @@ public:
     const char* what() const noexcept override { return msg.c_str(); }
 };
 
-// ================================================================
-//  WEEK 13 — FILE MANAGER (ofstream, ifstream, ios::app)
-// ================================================================
 class FileManager {
 private:
     const string MOVIES_FILE = "movies.txt";
@@ -939,7 +857,6 @@ private:
     }
 
 public:
-    // ofstream — write mode (clears existing file)
     void saveMovies(const vector<Movie>& movies) const {
         ofstream file(MOVIES_FILE);
         if (!file.is_open()) { cerr << "[FILE ERROR] Cannot open movies.txt\n"; return; }
@@ -980,7 +897,6 @@ public:
         cout << "[FILE] Users saved.\n";
     }
 
-    // ofstream with ios::app — append mode (no overwrite)
     void appendRating(const Rating& r) const {
         ofstream file(RATINGS_FILE, ios::app);
         if (!file.is_open()) return;
@@ -990,7 +906,6 @@ public:
         cout << "[FILE] Rating appended.\n";
     }
 
-    // ifstream — read mode
     vector<Movie> loadMovies() const {
         vector<Movie> mv; ifstream file(MOVIES_FILE);
         if (!file.is_open()) {
@@ -1057,21 +972,14 @@ public:
     }
 };
 
-// ================================================================
-//  Forward declaration — needed for friend class
-// ================================================================
 class Platform;
 class Analytics { public: static void showReport(const Platform& p); };
 
-// ================================================================
-//  WEEK 10 — MULTIPLE INHERITANCE + WEEK 4 STATIC
-//  AdminUser inherits from BOTH User AND StreamingEngine
-// ================================================================
 class AdminUser : public User, public StreamingEngine {
 private:
     string     adminLevel;
     int        currentBitrate;
-    static int adminCount;         // WEEK 4 — STATIC: shared by all objects
+    static int adminCount;        
 
 public:
     AdminUser(int id, const string& n, const string& e,
@@ -1085,7 +993,6 @@ public:
     }
     ~AdminUser() { adminCount--; }
 
-    // WEEK 4 — STATIC FUNCTION: called on class, not object
     static int getAdminCount() { return adminCount; }
 
     string getAdminLevel() const { return adminLevel; }
@@ -1109,7 +1016,6 @@ public:
              << "! Level: " << adminLevel << "\n";
     }
 
-    // StreamingEngine pure virtual overrides
     string getQuality()  const override { return "Unrestricted (Admin)"; }
     int    getBitrate()  const override { return currentBitrate;         }
     void stream()        const override {
@@ -1130,15 +1036,9 @@ public:
 };
 int AdminUser::adminCount = 0;
 
-// ================================================================
-//  PLATFORM — Central Controller
-//  WEEK 9: friend class Analytics reads private data directly
-//  WEEK 4: static member totalUsers
-// ================================================================
 class Platform {
-    friend class Analytics;            // WEEK 9 — FRIEND CLASS
+    friend class Analytics;          
 
-    // WEEK 4 — STATIC member
     static int totalUsers;
 
 private:
@@ -1222,7 +1122,6 @@ public:
         docs.push_back(Documentary(11,"Making a Murderer","English",8.6,2015,"Crime", "Various",         "Netflix",600,true));
     }
 
-    // WEEK 4 — STATIC getter
     static int getTotalUsers() { return totalUsers; }
 
     bool registerFree(const string& n, const string& e,
@@ -1305,7 +1204,7 @@ public:
         if (!loggedIn) { cout << "Please login first.\n"; return; }
         Movie* m = findMovie(id);
         if (!m) { cout << "Movie not found.\n"; return; }
-        StreamingEngine* engine = selectEngine();  // POLYMORPHISM
+        StreamingEngine* engine = selectEngine();  
         line('=');
         m->play();
         engine->stream();
@@ -1350,10 +1249,6 @@ public:
     User* getUser()     const { return currentUser;  }
 };
 int Platform::totalUsers = 0;
-
-// ================================================================
-//  WEEK 9 — FRIEND CLASS: Analytics reads Platform's private data
-// ================================================================
 void Analytics::showReport(const Platform& p) {
     cout << "\n+========================================+\n";
     cout << "|     ANALYTICS REPORT (Friend Class)    |\n";
@@ -1378,9 +1273,6 @@ void Analytics::showReport(const Platform& p) {
     cout << "+========================================+\n";
 }
 
-// ================================================================
-//  WEEK 12 — EXCEPTION HANDLING: safe wrappers
-// ================================================================
 void safeLogin(Platform& p, const string& e, const string& pw) {
     try {
         if (e.empty() || pw.empty())
@@ -1416,54 +1308,42 @@ void safeWatch(Platform& p, int id) {
     catch (const StreamException& ex){ cerr << "[STREAM ERR] " << ex.what() << "\n"; }
 }
 
-// ================================================================
-//  DEMO — Runs all OOP concepts (Menu option 5)
-// ================================================================
 void runDemo(Platform& p) {
     cout << "\n\n";
-    cout << "==============================================\n";
-    cout << "  WEEK 4: STATIC DATA & MEMBER FUNCTIONS\n";
-    cout << "==============================================\n";
+
+    cout << " STATIC DATA & MEMBER FUNCTIONS\n";
     cout << "[STATIC] AdminUser::getAdminCount()     = "
          << AdminUser::getAdminCount() << " (called on CLASS)\n";
     cout << "[STATIC] Platform::getTotalUsers()      = "
          << Platform::getTotalUsers() << "\n";
 
-    cout << "\n==============================================\n";
-    cout << "  WEEK 6: OPERATOR OVERLOADING\n";
-    cout << "==============================================\n";
+    cout << " OPERATOR OVERLOADING\n";
     Rating r1(1,1,4.5,"Brilliant film!","2025-01-01");
     Rating r2(1,2,3.0,"It was average.","2025-01-02");
     Rating r3(1,3,4.8,"Near perfect!","2025-01-03");
     cout << "r1: " << r1 << "\n";   // operator<<
     cout << "r2: " << r2 << "\n";
-    cout << "r1 > r2 ? " << (r1 > r2 ? "Yes" : "No") << "\n";  // operator>
-    cout << "r2 < r3 ? " << (r2 < r3 ? "Yes" : "No") << "\n";  // operator<
-    cout << "r1 == r3? " << (r1 == r3 ? "Yes" : "No") << "\n"; // operator==
+    cout << "r1 > r2 ? " << (r1 > r2 ? "Yes" : "No") << "\n"; 
+    cout << "r2 < r3 ? " << (r2 < r3 ? "Yes" : "No") << "\n";  
+    cout << "r1 == r3? " << (r1 == r3 ? "Yes" : "No") << "\n"; 
     Rating avg = r1 + r2;  // operator+
     cout << "r1 + r2 (averaged): "; avg.displayStars();
 
-    cout << "\n==============================================\n";
-    cout << "  WEEK 6b: FUNCTION OVERLOADING\n";
-    cout << "==============================================\n";
-    SearchHelper::search("Inception");        // string
-    SearchHelper::search(1);                  // int
-    SearchHelper::search("Nolan", 2010);      // string + int
-    SearchHelper::search(8.5);                // double
+    cout <<" FUNCTION OVERLOADING\n";
+    SearchHelper::search("Inception");       
+    SearchHelper::search(1);                  
+    SearchHelper::search("Nolan", 2010);     
+    SearchHelper::search(8.5);                
 
-    cout << "\n==============================================\n";
-    cout << "  WEEK 9: FRIEND CLASS\n";
-    cout << "==============================================\n";
+    cout << " FRIEND CLASS\n";
     Analytics::showReport(p);
 
-    cout << "\n==============================================\n";
-    cout << "  WEEK 10: MULTIPLE INHERITANCE\n";
-    cout << "==============================================\n";
+    cout << " MULTIPLE INHERITANCE\n";
     AdminUser admin(999,"SuperAdmin","admin@cine.com","admin1234","Super");
     admin.showWelcome();
     admin.displayProfile();
-    User* uPtr = &admin;             // IS-A User
-    StreamingEngine* sPtr = &admin;  // IS-A StreamingEngine
+    User* uPtr = &admin;             
+    StreamingEngine* sPtr = &admin;  
     cout << "\n[via User*]            ";
     cout << "Account: " << uPtr->getAccountType() << "\n";
     cout << "[via StreamingEngine*] "; sPtr->stream();
@@ -1471,16 +1351,12 @@ void runDemo(Platform& p) {
     admin.banUser(42);
     admin.addContent("Oppenheimer");
 
-    cout << "\n==============================================\n";
-    cout << "  WEEK 11: TEMPLATES\n";
-    cout << "==============================================\n";
-    // WatchHistory<T> — same template, different types
+    cout << " TEMPLATES\n";
     WatchHistory<Movie>       mh("DemoUser");
     WatchHistory<Documentary> dh("DemoUser");
     cout << "WatchHistory<Movie> and WatchHistory<Documentary>"
          << " — same template, two types.\n";
 
-    // Subscription<T>
     MonthlyPlan mp; AnnualPlan ap; FamilyPlan fp;
     Subscription<MonthlyPlan> s1("ali@x.com", mp, 30);
     Subscription<AnnualPlan>  s2("sara@x.com",ap, 365);
@@ -1488,25 +1364,21 @@ void runDemo(Platform& p) {
     s1.display(); s2.display(); s3.display();
     s1.renew(); s2.cancel();
 
-    cout << "\n==============================================\n";
-    cout << "  WEEK 11: DYNAMIC ARRAY + COPY CONSTRUCTOR\n";
-    cout << "==============================================\n";
+    cout << " DYNAMIC ARRAY + COPY CONSTRUCTOR\n";
     DynamicArray a1(4);
     a1.push(10); a1.push(20); a1.push(30);
     a1.display();
-    DynamicArray a2 = a1;  // copy constructor — deep copy
+    DynamicArray a2 = a1;  
     a2.push(40);
     cout << "a1 (unchanged after modifying a2): "; a1.display();
     cout << "a2 (independent deep copy):        "; a2.display();
-    DynamicArray a3(2); a3 = a1;  // copy assignment
+    DynamicArray a3(2); a3 = a1;
     cout << "a3 (copy assigned from a1):        "; a3.display();
     cout << "a1[1] via operator[]: " << a1[1] << "\n";
     try { cout << a1[99]; }
     catch (const out_of_range& e) { cerr << "[EXCEPTION] " << e.what() << "\n"; }
 
-    cout << "\n==============================================\n";
-    cout << "  WEEK 12: EXCEPTION HANDLING\n";
-    cout << "==============================================\n";
+    cout << "  EXCEPTION HANDLING\n";
     cout << "\n[Test 1] Login with empty fields:\n";
     safeLogin(p, "", "");
     cout << "\n[Test 2] Register with invalid email:\n";
@@ -1523,9 +1395,7 @@ void runDemo(Platform& p) {
     if (p.isLoggedIn()) { safeWatch(p, 1); p.logout(); }
     cout << "\n[Test 7] DynamicArray out-of-range (already shown above)\n";
 
-    cout << "\n==============================================\n";
-    cout << "  WEEK 14: STACK (LIFO) using DynamicArray\n";
-    cout << "==============================================\n";
+    cout << "  STACK (LIFO) using DynamicArray\n";
     Stack st("ViewHistory");
     st.push(101); st.push(202); st.push(303);
     st.display();
@@ -1534,9 +1404,7 @@ void runDemo(Platform& p) {
     try { Stack empty("Empty"); empty.pop(); }
     catch (const underflow_error& e) { cerr << "[EXCEPTION] " << e.what() << "\n"; }
 
-    cout << "\n==============================================\n";
-    cout << "  WEEK 14: QUEUE (FIFO) using DynamicArray\n";
-    cout << "==============================================\n";
+    cout << " QUEUE (FIFO) using DynamicArray\n";
     Queue q("StreamBuffer");
     q.enqueue(1); q.enqueue(2); q.enqueue(3);
     q.display();
@@ -1544,9 +1412,7 @@ void runDemo(Platform& p) {
     try { Queue empty("Empty"); empty.dequeue(); }
     catch (const underflow_error& e) { cerr << "[EXCEPTION] " << e.what() << "\n"; }
 
-    cout << "\n==============================================\n";
-    cout << "  WEEK 12: STL CONTAINERS (map, queue, stack)\n";
-    cout << "==============================================\n";
+    cout << "  STL CONTAINERS (map, queue, stack)\n";
     ContentCatalog cat;
     cat.addContent(1,"Inception");
     cat.addContent(2,"Dark Knight");
@@ -1560,14 +1426,8 @@ void runDemo(Platform& p) {
     cat.watchNext(); cat.watchNext();
     cat.showRecent();
 
-    cout << "\n==============================================\n";
-    cout << "  ALL CONCEPTS DEMONSTRATED SUCCESSFULLY!\n";
-    cout << "==============================================\n";
 }
 
-// ================================================================
-//  MAIN — Menu-driven application
-// ================================================================
 void clr() { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(),'\n'); }
 
 void userMenu(Platform& p) {
