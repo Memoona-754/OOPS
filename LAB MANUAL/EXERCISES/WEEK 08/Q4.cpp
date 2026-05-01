@@ -2,9 +2,6 @@
 #include <string>
 using namespace std;
 
-// ─────────────────────────────────────────
-// Base Class: Media
-// ─────────────────────────────────────────
 class Media {
 protected:
     string title;
@@ -49,9 +46,6 @@ public:
     virtual ~Media() {}
 };
 
-// ─────────────────────────────────────────
-// Attribute Class: BookAttributes
-// ─────────────────────────────────────────
 class BookAttributes {
 protected:
     string author;
@@ -76,9 +70,6 @@ public:
     virtual ~BookAttributes() {}
 };
 
-// ─────────────────────────────────────────
-// Attribute Class: MagazineAttributes
-// ─────────────────────────────────────────
 class MagazineAttributes {
 protected:
     int issueNumber;
@@ -104,9 +95,6 @@ public:
     virtual ~MagazineAttributes() {}
 };
 
-// ─────────────────────────────────────────
-// Attribute Class: DVDAttributes
-// ─────────────────────────────────────────
 class DVDAttributes {
 protected:
     string director;
@@ -131,9 +119,6 @@ public:
     virtual ~DVDAttributes() {}
 };
 
-// ─────────────────────────────────────────
-// Derived Class: Book (Media + BookAttributes)
-// ─────────────────────────────────────────
 class Book : public Media, public BookAttributes {
 public:
     Book() : Media(), BookAttributes() {}
@@ -148,9 +133,6 @@ public:
     }
 };
 
-// ─────────────────────────────────────────
-// Derived Class: Magazine (Media + MagazineAttributes)
-// ─────────────────────────────────────────
 class Magazine : public Media, public MagazineAttributes {
 public:
     Magazine() : Media(), MagazineAttributes() {}
@@ -165,9 +147,6 @@ public:
     }
 };
 
-// ─────────────────────────────────────────
-// Derived Class: DVD (Media + DVDAttributes)
-// ─────────────────────────────────────────
 class DVD : public Media, public DVDAttributes {
 public:
     DVD() : Media(), DVDAttributes() {}
@@ -182,9 +161,6 @@ public:
     }
 };
 
-// ─────────────────────────────────────────
-// Driver Program
-// ─────────────────────────────────────────
 int main() {
     cout << "========================================\n";
     cout << "        LIBRARY MANAGEMENT SYSTEM\n";
