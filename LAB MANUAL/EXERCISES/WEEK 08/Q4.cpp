@@ -2,201 +2,125 @@
 #include <string>
 using namespace std;
 
+// Base class
 class Media {
 protected:
     string title;
-    int year;
-    bool isBorrowed;
+    bool borrowed;
 
 public:
-    Media() : isBorrowed(false) {
-        cout << "Enter title: ";
-        cin.ignore();
-        getline(cin, title);
-        cout << "Enter year: ";
-        cin >> year;
+    Media(string t) {
+        title = t;
+        borrowed = false;
     }
 
-    Media(string t, int y) : title(t), year(y), isBorrowed(false) {}
-
-    void borrow() {
-        if (isBorrowed)
-            cout << "\"" << title << "\" is already borrowed.\n";
-        else {
-            isBorrowed = true;
-            cout << "\"" << title << "\" has been borrowed successfully.\n";
+    void borrowItem() {
+        if (!borrowed) {
+            borrowed = true;
+            cout << title << " has been borrowed.\n";
+        } else {
+            cout << title << " is already borrowed.\n";
         }
     }
 
-    void returnMedia() {
-        if (!isBorrowed)
-            cout << "\"" << title << "\" was not borrowed.\n";
-        else {
-            isBorrowed = false;
-            cout << "\"" << title << "\" has been returned successfully.\n";
+    void returnItem() {
+        if (borrowed) {
+            borrowed = false;
+            cout << title << " has been returned.\n";
+        } else {
+            cout << title << " was not borrowed.\n";
         }
     }
 
-    virtual void displayInfo() const {
-        cout << "  Title   : " << title << "\n";
-        cout << "  Year    : " << year  << "\n";
-        cout << "  Status  : " << (isBorrowed ? "Borrowed" : "Available") << "\n";
+    void displayMedia() {
+        cout << "Title: " << title << endl;
+        cout << "Status: " << (borrowed ? "Borrowed" : "Available") << endl;
     }
-
-    virtual ~Media() {}
 };
 
-class BookAttributes {
+// Book specific attributes
+class BookInfo {
 protected:
     string author;
-    string ISBN;
 
 public:
-    BookAttributes() {
-        cout << "Enter author: ";
-        cin.ignore();
-        getline(cin, author);
-        cout << "Enter ISBN: ";
-        cin >> ISBN;
+    BookInfo(string a) {
+        author = a;
     }
-
-    BookAttributes(string a, string isbn) : author(a), ISBN(isbn) {}
-
-    virtual void displayInfo() const {
-        cout << "  Author  : " << author << "\n";
-        cout << "  ISBN    : " << ISBN   << "\n";
-    }
-
-    virtual ~BookAttributes() {}
 };
 
-class MagazineAttributes {
+// Magazine specific attributes
+class MagazineInfo {
 protected:
     int issueNumber;
-    string publisher;
 
 public:
-    MagazineAttributes() {
-        cout << "Enter issue number: ";
-        cin >> issueNumber;
-        cout << "Enter publisher: ";
-        cin.ignore();
-        getline(cin, publisher);
+    MagazineInfo(int issue) {
+        issueNumber = issue;
     }
-
-    MagazineAttributes(int issue, string pub)
-        : issueNumber(issue), publisher(pub) {}
-
-    virtual void displayInfo() const {
-        cout << "  Issue No  : " << issueNumber << "\n";
-        cout << "  Publisher : " << publisher   << "\n";
-    }
-
-    virtual ~MagazineAttributes() {}
 };
 
-class DVDAttributes {
+// DVD specific attributes
+class DVDInfo {
 protected:
     string director;
-    double duration; // in minutes
 
 public:
-    DVDAttributes() {
-        cout << "Enter director: ";
-        cin.ignore();
-        getline(cin, director);
-        cout << "Enter duration (minutes): ";
-        cin >> duration;
-    }
-
-    DVDAttributes(string dir, double dur) : director(dir), duration(dur) {}
-
-    virtual void displayInfo() const {
-        cout << "  Director : " << director << "\n";
-        cout << "  Duration : " << duration << " mins\n";
-    }
-
-    virtual ~DVDAttributes() {}
-};
-
-class Book : public Media, public BookAttributes {
-public:
-    Book() : Media(), BookAttributes() {}
-
-    Book(string title, int year, string author, string isbn)
-        : Media(title, year), BookAttributes(author, isbn) {}
-
-    void displayInfo() const override {
-        cout << "\n[ BOOK ]\n";
-        Media::displayInfo();
-        BookAttributes::displayInfo();
+    DVDInfo(string d) {
+        director = d;
     }
 };
 
-class Magazine : public Media, public MagazineAttributes {
+// Book class using multiple inheritance
+class Book : public Media, public BookInfo {
 public:
-    Magazine() : Media(), MagazineAttributes() {}
+    Book(string t, string a) : Media(t), BookInfo(a) {}
 
-    Magazine(string title, int year, int issue, string publisher)
-        : Media(title, year), MagazineAttributes(issue, publisher) {}
-
-    void displayInfo() const override {
-        cout << "\n[ MAGAZINE ]\n";
-        Media::displayInfo();
-        MagazineAttributes::displayInfo();
+    void display() {
+        cout << "\n--- Book Information ---\n";
+        displayMedia();
+        cout << "Author: " << author << endl;
     }
 };
 
-class DVD : public Media, public DVDAttributes {
+// Magazine class using multiple inheritance
+class Magazine : public Media, public MagazineInfo {
 public:
-    DVD() : Media(), DVDAttributes() {}
+    Magazine(string t, int issue) : Media(t), MagazineInfo(issue) {}
 
-    DVD(string title, int year, string director, double duration)
-        : Media(title, year), DVDAttributes(director, duration) {}
+    void display() {
+        cout << "\n--- Magazine Information ---\n";
+        displayMedia();
+        cout << "Issue Number: " << issueNumber << endl;
+    }
+};
 
-    void displayInfo() const override {
-        cout << "\n[ DVD ]\n";
-        Media::displayInfo();
-        DVDAttributes::displayInfo();
+// DVD class using multiple inheritance
+class DVD : public Media, public DVDInfo {
+public:
+    DVD(string t, string d) : Media(t), DVDInfo(d) {}
+
+    void display() {
+        cout << "\n--- DVD Information ---\n";
+        displayMedia();
+        cout << "Director: " << director << endl;
     }
 };
 
 int main() {
-    cout << "========================================\n";
-    cout << "        LIBRARY MANAGEMENT SYSTEM\n";
-    cout << "========================================\n\n";
+    Book b("C++ Programming", "Bjarne Stroustrup");
+    Magazine m("Tech Monthly", 25);
+    DVD d("Inception", "Christopher Nolan");
 
-    // Create objects using parameterized constructors
-    Book    b("The Alchemist",      1988, "Paulo Coelho",    "978-0062315007");
-    Magazine m("National Geographic", 2024, 312,             "Nat Geo Partners");
-    DVD     d("Inception",          2010, "Christopher Nolan", 148.0);
+    b.display();
+    b.borrowItem();
+    b.returnItem();
 
-    // Display all media info
-    b.displayInfo();
-    m.displayInfo();
-    d.displayInfo();
+    m.display();
+    m.borrowItem();
 
-    // Borrow and return operations
-    cout << "\n--- Borrow / Return Operations ---\n";
-    b.borrow();
-    b.borrow();       // try borrowing again (already borrowed)
-    b.returnMedia();
-    b.returnMedia();  // try returning again (already returned)
-
-    m.borrow();
-    d.borrow();
-
-    // Display updated statuses
-    cout << "\n--- Updated Info After Borrowing ---";
-    b.displayInfo();
-    m.displayInfo();
-    d.displayInfo();
-
-    // Polymorphism via base class pointer
-    cout << "\n--- Polymorphism Demo (Media* array) ---\n";
-    Media* library[3] = { &b, &m, &d };
-    for (int i = 0; i < 3; i++)
-        library[i]->displayInfo();
+    d.display();
+    d.borrowItem();
 
     return 0;
 }
