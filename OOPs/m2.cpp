@@ -153,4 +153,5 @@ class D :  public B,public C{
 int main(){
     D d;
     d.show();
+    //d.B::show();
 }

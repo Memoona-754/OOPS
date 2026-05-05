@@ -360,7 +360,7 @@ public:
 
     void showWelcome() const override {
         cout << "Welcome, " << getName()
-             << "! FREE plan — " << getRemainingMins()
+             << "! FREE plan - " << getRemainingMins()
              << " mins remaining.\n";
         cout << "Upgrade to Premium for unlimited, ad-free streaming!\n";
     }
@@ -1434,11 +1434,11 @@ void userMenu(Platform& p) {
     int c;
     while (p.isLoggedIn()) {
         cout << "\n+--------------------------------------+\n";
-        cout << "| [1] Browse    [2] Search             |\n";
+        cout << "| [1] Browse       [2] Search          |\n";
         cout << "| [3] Watch Movie  [4] Watch Doc       |\n";
-        cout << "| [5] Rate      [6] View Ratings       |\n";
-        cout << "| [7] History   [8] Profile  [9] Files |\n";
-        cout << "| [0] Logout                           |\n";
+        cout << "| [5] Rate         [6] View Ratings    |\n";
+        cout << "| [7] History      [8] Profile         |\n";
+        cout << "| [9] Files        [0] Logout          |\n";
         cout << "+--------------------------------------+\n";
         cout << "Choice: "; cin >> c;
         if      (c==1) p.browseCatalog();
