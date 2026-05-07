@@ -29,7 +29,7 @@ public:
 };
 
 int main() {
-     Vehicle v;                     // ERROR! cannot create abstract object
+    // Vehicle v;                     // ERROR! cannot create abstract object
 
     Vehicle* v1 = new Car();
     Vehicle* v2 = new Bike();

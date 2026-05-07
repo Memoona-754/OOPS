@@ -449,12 +449,10 @@ public:
     string getReview()     const { return reviewText; }
     string getDatePosted() const { return datePosted; }
 
-    // WEEK 2 — ENCAPSULATION: validated setter
     void setScore(double s) {
         score = (s < 1.0) ? 1.0 : (s > 5.0) ? 5.0 : s;
     }
 
-    // WEEK 6 — OPERATOR OVERLOADING
     bool   operator>(const Rating& o)  const { return score > o.score;  }
     bool   operator<(const Rating& o)  const { return score < o.score;  }
     bool   operator==(const Rating& o) const { return score == o.score; }
