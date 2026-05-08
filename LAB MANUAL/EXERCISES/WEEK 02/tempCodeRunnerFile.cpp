@@ -1,4 +1,4 @@
-// #include <iostream>
+#include <iostream>
 // #include <string>
 // using namespace std;
 
@@ -37,41 +37,3 @@
 
 //     return 0;
 // }
-
-#include<iostream>
-using namespace std;
-class Student{
-    public:
-    string name;
-    int roll_nmbr;
-    int sem;
-    string sec;
-     
-    Student(string n,int r,int s,string e){
-        name = n;
-        roll_nmbr = r;
-        sem = s;
-        sec= e;
-
-    }
-
-    void print(){
-        cout<<name<<" has "<<roll_nmbr<<" is of "<<sem<<" and "<<sec<<endl;
-    }
-
-};
-int main(){
-    Student s1("Memoona",166,2,"A");
-    Student s2("Marium",122,3,"B");
-    Student s3("Ali",155,4,"A");
-
-    if(s1.sec == "A"){
-        s1.print();}
-    if(s2.sec == "A")    
-        s2.print();
-    if(s3.sec == "A")    
-        s3.print();
-    
-    return 0;
-}
-
