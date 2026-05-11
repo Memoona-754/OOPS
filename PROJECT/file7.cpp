@@ -1450,4 +1450,5 @@ int main() {
         else if (choice == 0) { cout << "Closing M-Flix. Thanks for using our platform! Goodbye!\n"; return 0; }
         else cout << "That's not a valid option. Please try again.\n";
     }
+    return 0;
 }
