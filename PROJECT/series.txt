@@ -1,0 +1,5 @@
+6|Breaking Bad|English|9.5|2008|Drama|5|Completed
+7|The Vampire Diaries|English|8.3|2009|Supernatural|8|Completed
+8|Sherlock|English|9.1|2010|Crime Drama|4|Completed
+9|The Crown|English|8.6|2016|Historical Drama|5|Completed
+10|Stranger Things|English|8.7|2016|Sci-Fi Horror|4|Ongoing
