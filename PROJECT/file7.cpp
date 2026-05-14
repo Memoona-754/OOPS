@@ -10,6 +10,7 @@
 using namespace std;
 
 class MediaContent {
+    
 private:
     int    contentID;
     string title;
@@ -865,6 +866,7 @@ public:
         cout << "Your account data has been saved.\n";
     }
 
+
     void appendRating(const Rating& r) const {
         ofstream file(RATINGS_FILE, ios::app);
         if (!file.is_open()) return;
@@ -873,6 +875,7 @@ public:
              << r.getDatePosted()<< "\n";
         cout << "Got it - your rating has been saved!\n";
     }
+
 
     vector<Movie> loadMovies() const {
         vector<Movie> mv; ifstream file(MOVIES_FILE);
@@ -963,6 +966,35 @@ public:
         cout << sv.size() << " series found and loaded.\n";
         return sv;
     }
+    
+    pair<vector<FreeUser>, vector<PremiumUser>> loadUsers() const {
+    vector<FreeUser> freeUsers;
+    vector<PremiumUser> premUsers;
+
+    ifstream file(USERS_FILE);
+    if (!file.is_open()) {
+        cout << "No saved user data found - starting fresh.\n";
+        return {freeUsers, premUsers};
+    }
+
+    string line;
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        auto t = splitLine(line);
+        try {
+            if (t[0] == "FREE" && t.size() >= 5) {
+                freeUsers.push_back(FreeUser(stoi(t[1]), t[2], t[3], t[4]));
+            } else if (t[0] == "PREMIUM" && t.size() >= 6) {
+                premUsers.push_back(PremiumUser(stoi(t[1]), t[2], t[3], t[4], t[5]));
+            }
+        } catch (...) {
+            cerr << "Skipping corrupted user entry.\n";
+        }
+    }
+    file.close();
+    cout << freeUsers.size() + premUsers.size() << " users loaded.\n";
+    return {freeUsers, premUsers};
+}
 
     void checkFiles() const {
         cout << "\n  Checking which data files are present on disk...\n";
@@ -1093,6 +1125,7 @@ public:
         series  = fm.loadSeries();
         docs    = fm.loadDocumentaries();
         ratings = fm.loadRatings();
+        auto [freeU,premU]= fm.loadUsers();
         seedCatalog();
         cout << "You're all set. Have fun exploring!\n";
     }
