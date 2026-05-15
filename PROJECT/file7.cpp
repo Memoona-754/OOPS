@@ -9,8 +9,7 @@
 #include <limits>
 using namespace std;
 
-class MediaContent {
-    
+class MediaContent {  
 private:
     int    contentID;
     string title;
