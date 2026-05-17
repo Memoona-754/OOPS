@@ -1,78 +1,145 @@
-//MEMOONA          //CT-166
-#include <iostream>
+// //MEMOONA          //CT-166
+// #include <iostream>
+// using namespace std;
+
+// // Abstract base class
+// class ArrayMultiplier {
+// public:
+//     virtual void calculate() = 0; // Pure virtual function
+// };
+
+// // Derived class for 1D array multiplication
+// class ArrayMultiplier1D : public ArrayMultiplier {
+// private:
+//     int arr[100], size;
+
+// public:
+//     void input() {
+//         cout << "Enter size of 1D array: ";
+//         cin >> size;
+//         cout << "Enter elements:\n";
+//         for (int i = 0; i < size; i++) {
+//             cin >> arr[i];
+//         }
+//     }
+
+//     void calculate() override {
+//         int product = 1;
+//         for (int i = 0; i < size; i++) {
+//             product *= arr[i];
+//         }
+//         cout << "Product of 1D array elements = " << product << endl;
+//     }
+// };
+
+// // Derived class for 2D array multiplication
+// class ArrayMultiplier2D : public ArrayMultiplier {
+// private:
+//     int arr[10][10], rows, cols;
+
+// public:
+//     void input() {
+//         cout << "Enter number of rows and columns: ";
+//         cin >> rows >> cols;
+//         cout << "Enter elements:\n";
+//         for (int i = 0; i < rows; i++) {
+//             for (int j = 0; j < cols; j++) {
+//                 cin >> arr[i][j];
+//             }
+//         }
+//     }
+
+//     void calculate() override {
+//         int product = 1;
+//         for (int i = 0; i < rows; i++) {
+//             for (int j = 0; j < cols; j++) {
+//                 product *= arr[i][j];
+//             }
+//         }
+//         cout << "Product of 2D array elements = " << product << endl;
+//     }
+// };
+
+// // Main function
+// int main() {
+//     ArrayMultiplier* ptr;
+
+//     ArrayMultiplier1D obj1;
+//     obj1.input();
+//     ptr = &obj1;
+//     ptr->calculate();
+
+//     ArrayMultiplier2D obj2;
+//     obj2.input();
+//     ptr = &obj2;
+//     ptr->calculate();
+
+//     return 0;
+// }
+
+
+#include<iostream>
 using namespace std;
 
-// Abstract base class
-class ArrayMultiplier {
-public:
-    virtual void calculate() = 0; // Pure virtual function
+class ArrayMultiplication{
+    public:
+    virtual void calculate()=0;
 };
 
-// Derived class for 1D array multiplication
-class ArrayMultiplier1D : public ArrayMultiplier {
-private:
-    int arr[100], size;
+class ArrayMultiplication1D : public ArrayMultiplication{
+      public:
+      int arr[10];
+      int size;
 
-public:
-    void input() {
-        cout << "Enter size of 1D array: ";
-        cin >> size;
-        cout << "Enter elements:\n";
-        for (int i = 0; i < size; i++) {
-            cin >> arr[i];
-        }
-    }
+      void input(){
+        cout<<"Enter the size of array : ";
+        cin>>size;
+        cout<<"Enter elements : ";
+        for(int i = 0;i<size;i++)
+        cin>>arr[i];
+      }
 
-    void calculate() override {
+      void calculate()override{
         int product = 1;
-        for (int i = 0; i < size; i++) {
-            product *= arr[i];
+        for(int i = 0; i < size;i++){
+            product *=arr[i];
         }
-        cout << "Product of 1D array elements = " << product << endl;
-    }
+        cout<<"The product is : "<<product<<endl;
+      }
 };
 
-// Derived class for 2D array multiplication
-class ArrayMultiplier2D : public ArrayMultiplier {
-private:
-    int arr[10][10], rows, cols;
+class ArrayMultiplication2D : public ArrayMultiplication{
+    public:
+    int arr[5][5];
+    int rows;
+    int colms;
 
-public:
-    void input() {
-        cout << "Enter number of rows and columns: ";
-        cin >> rows >> cols;
-        cout << "Enter elements:\n";
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                cin >> arr[i][j];
-            }
+    void input(){
+      cout<<"Enter rows and colums of array : ";
+      cin>>rows>>colms;
+      cout<<"Enter elements : ";
+      for(int i=0;i<rows;i++){
+        for(int j=0;j<colms;j++){
+            cin>>arr[i][j];
         }
+      }
     }
-
-    void calculate() override {
+    void calculate()override{
         int product = 1;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                product *= arr[i][j];
-            }
+        for(int i=0;i<rows;i++){
+             for(int j=0;j<colms;j++){
+              product *= arr[i][j];
         }
-        cout << "Product of 2D array elements = " << product << endl;
+      }
+       cout<<"The product is : "<<product<<endl;
     }
 };
+int main(){
+    ArrayMultiplication1D M;
+    M.input();
+    M.calculate();
 
-// Main function
-int main() {
-    ArrayMultiplier* ptr;
-
-    ArrayMultiplier1D obj1;
-    obj1.input();
-    ptr = &obj1;
-    ptr->calculate();
-
-    ArrayMultiplier2D obj2;
-    obj2.input();
-    ptr = &obj2;
-    ptr->calculate();
-
-    return 0;
+     ArrayMultiplication2D N;
+    N.input();
+    N.calculate();
 }
