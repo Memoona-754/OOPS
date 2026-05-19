@@ -3,15 +3,18 @@
 using namespace std;
 
 int main() {
+    string sourceName, destinationName;
     char ch;
 
-    // Open source file
-    ifstream sourceFile("source.txt");
+    cout << "Enter source file name: ";
+    cin >> sourceName;
 
-    // Open destination file
-    ofstream destinationFile("destination.txt");
+    cout << "Enter destination file name: ";
+    cin >> destinationName;
 
-    // Check if files opened successfully
+    ifstream sourceFile(sourceName);
+    ofstream destinationFile(destinationName);
+
     if (!sourceFile) {
         cout << "Source file cannot be opened." << endl;
         return 1;
@@ -22,14 +25,12 @@ int main() {
         return 1;
     }
 
-    // Copy contents character by character
     while (sourceFile.get(ch)) {
         destinationFile.put(ch);
     }
 
     cout << "File copied successfully." << endl;
 
-    // Close files
     sourceFile.close();
     destinationFile.close();
 
