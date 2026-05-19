@@ -1,104 +1,183 @@
+// #include <iostream>
+// #include <string>
+// using namespace std;
+
+// // Abstract Base Class
+// class DecryptionTechnique {
+// public:
+//     // Pure Virtual Function
+//     virtual void decrypt(string code) = 0;
+
+//     // Virtual Destructor
+//     virtual ~DecryptionTechnique() {}
+// };
+
+// // Derived Class for Technique 1
+// // Converts ASCII codes back to characters
+// class DecryptionTechnique1 : public DecryptionTechnique {
+// public:
+//     void decrypt(string code) override {
+
+//         string decrypted = "";
+
+//         // Read ASCII values in groups
+//         for (int i = 0; i < code.length();) {
+
+//             int ascii;
+
+//             // Handle 2-digit and 3-digit ASCII values
+//             if (code[i] == '1') {
+//                 ascii = stoi(code.substr(i, 3));
+//                 i += 3;
+//             }
+//             else {
+//                 ascii = stoi(code.substr(i, 2));
+//                 i += 2;
+//             }
+
+//             decrypted += char(ascii);
+//         }
+
+//         cout << "\nTechnique 1 Decryption: " 
+//              << decrypted << endl;
+//     }
+// };
+
+// // Derived Class for Technique 2
+// // Subtracts 2 from ASCII values before conversion
+// class DecryptionTechnique2 : public DecryptionTechnique {
+// public:
+//     void decrypt(string code) override {
+
+//         string decrypted = "";
+
+//         for (int i = 0; i < code.length();) {
+
+//             int ascii;
+
+//             // Handle 2-digit and 3-digit values
+//             if (code[i] == '1') {
+//                 ascii = stoi(code.substr(i, 3)) - 2;
+//                 i += 3;
+//             }
+//             else {
+//                 ascii = stoi(code.substr(i, 2)) - 2;
+//                 i += 2;
+//             }
+
+//             decrypted += char(ascii);
+//         }
+
+//         cout << "Technique 2 Decryption: " 
+//              << decrypted << endl;
+//     }
+// };
+
+// // Main Function
+// int main() {
+
+//     string code1, code2;
+
+//     cout << "Enter Encrypted String for Technique 1: ";
+//     cin >> code1;
+
+//     cout << "Enter Encrypted String for Technique 2: ";
+//     cin >> code2;
+
+//     // Base Class Pointers
+//     DecryptionTechnique* ptr1;
+//     DecryptionTechnique* ptr2;
+
+//     // Dynamic Memory Allocation
+//     ptr1 = new DecryptionTechnique1();
+//     ptr2 = new DecryptionTechnique2();
+
+//     // Calling Decrypt Functions
+//     ptr1->decrypt(code1);
+//     ptr2->decrypt(code2);
+
+//     // Free Memory
+//     delete ptr1;
+//     delete ptr2;
+
+//     return 0;
+// }
+
 #include <iostream>
 #include <string>
 using namespace std;
 
-// Abstract Base Class
-class DecryptionTechnique {
+// Abstract Class
+class DecryptionTechnique
+{
 public:
-    // Pure Virtual Function
-    virtual void decrypt(string code) = 0;
-
-    // Virtual Destructor
-    virtual ~DecryptionTechnique() {}
+    // Pure virtual function
+    virtual string decrypt(string msg) = 0;
 };
 
-// Derived Class for Technique 1
+// Technique 1 Decryption
 // Converts ASCII codes back to characters
-class DecryptionTechnique1 : public DecryptionTechnique {
+class DecryptionTechnique1 : public DecryptionTechnique
+{
 public:
-    void decrypt(string code) override {
+    string decrypt(string msg)
+    {
+        string result = "";
 
-        string decrypted = "";
+        // Read every 2 digits as ASCII code
+        for (int i = 0; i < msg.length(); i += 2)
+        {
+            string temp = msg.substr(i, 2);
+            int ascii = stoi(temp);
 
-        // Read ASCII values in groups
-        for (int i = 0; i < code.length();) {
-
-            int ascii;
-
-            // Handle 2-digit and 3-digit ASCII values
-            if (code[i] == '1') {
-                ascii = stoi(code.substr(i, 3));
-                i += 3;
-            }
-            else {
-                ascii = stoi(code.substr(i, 2));
-                i += 2;
-            }
-
-            decrypted += char(ascii);
+            result += char(ascii);
         }
 
-        cout << "\nTechnique 1 Decryption: " 
-             << decrypted << endl;
+        return result;
     }
 };
 
-// Derived Class for Technique 2
-// Subtracts 2 from ASCII values before conversion
-class DecryptionTechnique2 : public DecryptionTechnique {
+// Technique 2 Decryption
+// First subtract 2, then convert back to characters
+class DecryptionTechnique2 : public DecryptionTechnique
+{
 public:
-    void decrypt(string code) override {
+    string decrypt(string msg)
+    {
+        string result = "";
 
-        string decrypted = "";
+        for (int i = 0; i < msg.length(); i += 2)
+        {
+            string temp = msg.substr(i, 2);
+            int ascii = stoi(temp);
 
-        for (int i = 0; i < code.length();) {
+            ascii = ascii - 2;
 
-            int ascii;
-
-            // Handle 2-digit and 3-digit values
-            if (code[i] == '1') {
-                ascii = stoi(code.substr(i, 3)) - 2;
-                i += 3;
-            }
-            else {
-                ascii = stoi(code.substr(i, 2)) - 2;
-                i += 2;
-            }
-
-            decrypted += char(ascii);
+            result += char(ascii);
         }
 
-        cout << "Technique 2 Decryption: " 
-             << decrypted << endl;
+        return result;
     }
 };
 
-// Main Function
-int main() {
+int main()
+{
+    string encrypted1, encrypted2;
 
-    string code1, code2;
+    cout << "Enter Technique 1 encrypted message: ";
+    cin >> encrypted1;
 
-    cout << "Enter Encrypted String for Technique 1: ";
-    cin >> code1;
+    cout << "Enter Technique 2 encrypted message: ";
+    cin >> encrypted2;
 
-    cout << "Enter Encrypted String for Technique 2: ";
-    cin >> code2;
+    DecryptionTechnique1 d1;
+    DecryptionTechnique2 d2;
 
-    // Base Class Pointers
-    DecryptionTechnique* ptr1;
-    DecryptionTechnique* ptr2;
+    cout << "\nTechnique 1 Decryption: "
+         << d1.decrypt(encrypted1) << endl;
 
-    // Dynamic Memory Allocation
-    ptr1 = new DecryptionTechnique1();
-    ptr2 = new DecryptionTechnique2();
-
-    // Calling Decrypt Functions
-    ptr1->decrypt(code1);
-    ptr2->decrypt(code2);
-
-    // Free Memory
-    delete ptr1;
-    delete ptr2;
+    cout << "Technique 2 Decryption: "
+         << d2.decrypt(encrypted2) << endl;
 
     return 0;
 }
