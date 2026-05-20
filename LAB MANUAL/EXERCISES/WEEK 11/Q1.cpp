@@ -1,50 +1,96 @@
-#include <iostream>
-#include <string>
-#include <exception>
+// #include<iostream>
+// #include<cctype>
+// using namespace std;
+// class InvalidPasswordException {
+//     private :
+//     string msg;
+//     public :
+//     InvalidPasswordException(string m):msg(m){}
+//     string getMsg(){
+//         return msg;
+//     }
+// };
+
+// int main(){
+//     string username, password;
+//     bool hasDigit = false;
+
+//     try {
+//         cout << "Enter Username: ";
+//         cin >> username;
+
+//         cout << "Enter Password: ";
+//         cin >> password;
+
+//         // Check password length
+//         if (password.length() < 6) {
+//             throw InvalidPasswordException("Password too short(must contain atleast 6 characters)!");
+//         }
+
+//         // Check if password contains a digit
+//         for (int i = 0; i < password.length(); i++) {
+//             if (isdigit(password[i])) {
+//                 hasDigit = true;
+//                 break;
+//             }
+//         }
+
+//         if (!hasDigit) {
+//             throw InvalidPasswordException("Password must contain atleast 1 digit!");
+//         }
+
+//         cout << "\nLogin Successful!" << endl;
+//     }
+//     catch(InvalidPasswordException &e){
+//         cout<<e.getMsg();
+//     }
+//     return 0;
+// }
+
+#include<iostream>
+#include<cctype>
 using namespace std;
 
-// Custom Exception Class
-class InvalidPasswordException : public exception {
-public:
-    const char* what() const noexcept {
-        return "Password must be at least 6 characters long and contain at least one digit.";
+class InvalidPassword{
+    private:
+    string message;
+    public:
+    InvalidPassword(string m):message(m){}
+    string exception(){
+        return message;
     }
 };
+int main(){
+    string username;
+    string password;
+    bool hasdigit = false;
 
-int main() {
-    string username, password;
-    bool hasDigit = false;
+    try
+    {
+        cout<<"Enter username : ";
+        cin>>username;
 
-    try {
-        cout << "Enter Username: ";
-        cin >> username;
+        cout<<"Enter password : ";
+        cin>>password;
 
-        cout << "Enter Password: ";
-        cin >> password;
-
-        // Check password length
-        if (password.length() < 6) {
-            throw InvalidPasswordException();
+        if (password.length() < 6){
+            throw InvalidPassword("Password should be of atleast 6 characters");
         }
 
-        // Check if password contains a digit
-        for (int i = 0; i < password.length(); i++) {
-            if (isdigit(password[i])) {
-                hasDigit = true;
+        for ( int i =0 ; i<password.length();i++){
+            if(isdigit(password[i])){
+                hasdigit= true;
                 break;
             }
         }
-
-        if (!hasDigit) {
-            throw InvalidPasswordException();
+        if (!hasdigit){
+            throw InvalidPassword("Password must contain atleast one digit ");
         }
-
-        cout << "\nLogin Successful!" << endl;
+        cout<<"Login succesfull!";
     }
-
-    catch (InvalidPasswordException &e) {
-        cout << "\nException Caught: " << e.what() << endl;
+    catch(InvalidPassword &e)
+    {
+      cout<<e.exception();
     }
-
     return 0;
 }
