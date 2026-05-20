@@ -1,146 +1,37 @@
-#include <iostream>
-#include <map>
+#include<iostream>
+#include<map>
 using namespace std;
 
-// Function to add students
-void addStudent(map<string, float>& students) {
-    string name;
-    float grade;
-
-    cout << "Enter student name: ";
-    cin >> name;
-
-    cout << "Enter grade: ";
-    cin >> grade;
-
-    students[name] = grade;
-
-    cout << "Student added successfully!\n";
-}
-
-// Function to retrieve grade
-void retrieveGrade(map<string, float>& students) {
-    string name;
-
-    cout << "Enter student name to search: ";
-    cin >> name;
-
-    if (students.find(name) != students.end()) {
-        cout << "Grade of " << name
-             << " is " << students[name] << endl;
+class GradeManager{
+    private:
+    map<string,int> grades;
+    public:
+    void addStudent(string name, int grade){
+        grades[name] = grade;
     }
-    else {
-        cout << "Student not found!\n";
-    }
-}
-
-// Function to update grade
-void updateGrade(map<string, float>& students) {
-    string name;
-    float newGrade;
-
-    cout << "Enter student name to update: ";
-    cin >> name;
-
-    if (students.find(name) != students.end()) {
-
-        cout << "Enter new grade: ";
-        cin >> newGrade;
-
-        students[name] = newGrade;
-
-        cout << "Grade updated successfully!\n";
-    }
-    else {
-        cout << "Student not found!\n";
-    }
-}
-
-// Function to delete student
-void deleteStudent(map<string, float>& students) {
-    string name;
-
-    cout << "Enter student name to delete: ";
-    cin >> name;
-
-    if (students.find(name) != students.end()) {
-
-        students.erase(name);
-
-        cout << "Student deleted successfully!\n";
-    }
-    else {
-        cout << "Student not found!\n";
-    }
-}
-
-// Function to display all students
-void displayStudents(map<string, float>& students) {
-
-    if (students.empty()) {
-        cout << "No student records found.\n";
-        return;
-    }
-
-    cout << "\n--- Student Records ---\n";
-
-    for (auto it = students.begin();
-         it != students.end(); it++) {
-
-        cout << "Name: " << it->first
-             << " | Grade: " << it->second << endl;
-    }
-}
-
-int main() {
-
-    map<string, float> students;
-
-    int choice;
-
-    do {
-        cout << "\n===== Student Grade System =====\n";
-        cout << "1. Add Student\n";
-        cout << "2. Retrieve Grade\n";
-        cout << "3. Update Grade\n";
-        cout << "4. Delete Student\n";
-        cout << "5. Display All Students\n";
-        cout << "6. Exit\n";
-
-        cout << "Enter your choice: ";
-        cin >> choice;
-
-        switch(choice) {
-
-        case 1:
-            addStudent(students);
-            break;
-
-        case 2:
-            retrieveGrade(students);
-            break;
-
-        case 3:
-            updateGrade(students);
-            break;
-
-        case 4:
-            deleteStudent(students);
-            break;
-
-        case 5:
-            displayStudents(students);
-            break;
-
-        case 6:
-            cout << "Exiting program...\n";
-            break;
-
-        default:
-            cout << "Invalid choice!\n";
+    void displayAll(){
+        for (auto& p : grades){
+            cout<<p.first<<": "<<p.second<<endl;
         }
-
-    } while(choice != 6);
-
-    return 0;
+    }
+    void retrieve(string name){
+        if(grades.find(name)!= grades.end()){
+            cout<<grades[name];
+        }
+    }
+    void remove(string name){
+        grades.erase(name);
+    }
+    void modify(string name, int grade){
+        grades[name] = grade;
+    }
+};
+int main(){
+    GradeManager m;
+    m.addStudent("Marium",85);
+    m.addStudent("Memoona",90);
+    m.addStudent("Zaid",75);
+    m.displayAll();
+    m.remove("Zaid");
+    m.displayAll();
 }
