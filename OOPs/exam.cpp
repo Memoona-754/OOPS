@@ -80,7 +80,7 @@ public:
     TechnicalLead(int id, string name, int base,
                   string team, int bonus, int years,
                   int projects, int rate, int allowance)
-    : Worker(id, name, base),                        // virtual base directly initialize karo
+    : Worker(id, name, base),                    
       FullTimeDeveloper(id, name, base, team, bonus, years),
       FreelanceDeveloper(id, name, base, projects, rate),
       leadershipAllowance(allowance) {}
