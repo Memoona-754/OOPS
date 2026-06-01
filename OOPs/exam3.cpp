@@ -20,4 +20,14 @@ int main(){
     catch(string & e){
         cout<<"Error"<<e<<endl;
     }
+    char c[] = {'a', 'b', 'c', 'd', 'e'};
+    int cSize = 5;
+
+    try{
+        int index = searchElement(c, cSize, 'c');
+        cout << "Char element found at index: " << index << endl;
+    }
+    catch(string & e){
+        cout << "Error: " << e << endl;
+    }
 }
